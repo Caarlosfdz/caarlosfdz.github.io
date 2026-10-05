@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import AccentSwitcher from '../components/AccentSwitcher.astro';
+---
+<Base
+  title="Carlos Fernández | Diseño web, logotipos y redes sociales en Cádiz"
+  description="Soy Carlos, estudiante de Marketing y Publicidad en Cádiz. Diseño webs, logotipos e identidad y gestiono redes sociales para negocios locales."
+>
+  <Nav />
+  <main id="contenido">
+    <Hero />
+  </main>
+  <AccentSwitcher />
+  <script>
+    import '../scripts/motion';
+  </script>
+</Base>

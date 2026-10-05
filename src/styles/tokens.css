@@ -1,0 +1,38 @@
+/* Sistema de diseño: todo lo que cambia la identidad vive aquí. */
+:root {
+  /* Color */
+  --noche: #0b0b0c;
+  --cal: #ece9e4;
+  --tinta: #141414;
+  --humo: #2a2a2d;
+  --accent: #c6f135; /* ← cambiar el acento = tocar solo esta línea */
+  --on-accent: #0b0b0c; /* texto sobre el acento */
+  --accent-text: var(--accent); /* acento para texto pequeño sobre fondo oscuro */
+
+  /* Tipografía */
+  --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
+  --font-text: 'Instrument Sans Variable', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+
+  /* Escala (móvil → escritorio) */
+  --step--1: clamp(0.82rem, 0.8rem + 0.1vw, 0.9rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.1rem + 0.7vw, 1.65rem);
+  --step-2: clamp(1.7rem, 1.3rem + 1.8vw, 2.7rem);
+  --step-3: clamp(2.4rem, 1.6rem + 3.6vw, 4.6rem);
+  --step-4: clamp(3rem, 1.6rem + 6.4vw, 8rem);
+
+  /* Espaciado */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 7rem;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --radius: 999px;
+}
+
+/* TEMPORAL (fase 1): las tres versiones de color para elegir. */
+:root[data-accent='cobalto'] { --accent: #2f4bff; --on-accent: #ffffff; --accent-text: #8c9bff; }
+:root[data-accent='bermellon'] { --accent: #ff4a1c; --on-accent: #0b0b0c; }

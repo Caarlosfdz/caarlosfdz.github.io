@@ -1,0 +1,167 @@
+---
+import { Image } from 'astro:assets';
+import retrato from '../assets/carlos-recorte.png';
+import { enlacePrincipal } from '../config/contacto';
+---
+<section class="hero" id="inicio" aria-labelledby="hero-titulo">
+  <div class="hero__bg" aria-hidden="true">
+    <span class="smoke smoke--a"></span>
+    <span class="smoke smoke--b"></span>
+    <span class="grain"></span>
+  </div>
+
+  <h1 class="hero__title display" id="hero-titulo">
+    <span class="line"><span class="line__in">Hola, soy</span></span>
+    <span class="line line--name"><span class="line__in">Carlos Fernández</span></span>
+  </h1>
+
+  <div class="hero__word display" aria-hidden="true" data-parallax>PORTFOLIO</div>
+
+  <div class="hero__portrait">
+    <span class="hero__circle" aria-hidden="true"></span>
+    <Image
+      src={retrato}
+      alt="Retrato de Carlos Fernández en blanco y negro"
+      widths={[480, 720, 960]}
+      sizes="(min-width: 52rem) 44vw, 90vw"
+      format="webp"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <ul class="pills" aria-label="Servicios">
+    <li class="pill pill--1"><span class="pill__in" data-pill>Diseño web</span></li>
+    <li class="pill pill--2"><span class="pill__in" data-pill>Logotipos e identidad</span></li>
+    <li class="pill pill--3"><span class="pill__in" data-pill>Redes sociales</span></li>
+  </ul>
+
+  <div class="hero__foot">
+    <p class="hero__lead">Diseño webs, logos y redes sociales para negocios de Cádiz que quieren que se les vea.</p>
+    <a class="btn" href={enlacePrincipal} data-magnetic>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.400 1.300-1.900 1.300-.5.100-1.100.1-1.800-.1a16 16 0 0 1-5.700-3.500c-1.100-1-2-2.400-2.100-3.600-.1-1.100.5-1.700.9-2 .3-.3.700-.3.900-.3h.600c.2 0 .4 0 .6.500l.8 1.900c.1.200.1.400 0 .6l-.5.700c-.2.200-.3.400-.1.700.7 1.100 1.600 2 2.800 2.600.3.200.5.100.7-.1l.7-.9c.2-.3.400-.2.700-.1l1.800.9c.3.100.4.200.5.300.1.200.1.800-.1 1.400Z"/></svg>
+      Escríbeme por WhatsApp
+    </a>
+  </div>
+
+  <p class="hero__note hand" aria-hidden="true">
+    <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="arrow__path" d="M112 8C86 4 52 12 40 44c-2 6-3 12-2 18"/><path class="arrow__path" d="M26 50l12 14 14-12"/></svg>
+    ¿Tienes un negocio en Cádiz? Cuéntamelo.
+  </p>
+</section>
+
+<style>
+  .hero {
+    --pw: min(88vw, 56svh);
+    position: relative; isolation: isolate; overflow: hidden;
+    min-height: 100svh; min-height: 100vh; min-height: 100svh;
+    background: var(--noche);
+  }
+
+  /* Fondo: humo con degradados y un poco de ruido */
+  .hero__bg { position: absolute; inset: 0; z-index: -1; }
+  .smoke { position: absolute; border-radius: 50%; will-change: transform; }
+  .smoke--a {
+    width: 80vw; height: 80vw; left: -25vw; top: -20vw;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.1), transparent 70%);
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .smoke--b {
+    width: 70vw; height: 70vw; right: -25vw; bottom: -30vw;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%);
+    animation: drift 28s ease-in-out infinite alternate-reverse;
+  }
+  .grain {
+    position: absolute; inset: 0; opacity: 0.22; mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  @keyframes drift { to { transform: translate3d(6vw, 4vw, 0) scale(1.08); } }
+
+  /* Titular */
+  .hero__title {
+    position: relative; z-index: 5;
+    padding: 5.5rem var(--gutter) 0; text-align: center;
+    font-size: clamp(2.1rem, 1.2rem + 4.6vw, 5.4rem);
+  }
+  .line { display: block; overflow: hidden; padding-block: 0.06em; }
+  .line__in { display: block; }
+  .line--name { color: var(--accent); }
+
+  /* Palabra gigante detrás del retrato */
+  .hero__word {
+    position: absolute; z-index: 0; left: 0; right: 0; text-align: center;
+    top: 30%; font-size: 11vw; line-height: 1; white-space: nowrap;
+    color: #2a2a2f; letter-spacing: -0.03em; user-select: none;
+  }
+
+  /* Retrato sobre círculo */
+  .hero__portrait {
+    position: absolute; z-index: 2; bottom: 0; left: 0; right: 0; margin-inline: auto;
+    width: var(--pw);
+  }
+  .hero__portrait img {
+    position: relative; width: 100%; height: auto;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  }
+  .hero__circle {
+    position: absolute; z-index: -1; left: 50%; bottom: -4%;
+    width: 112%; aspect-ratio: 1; margin-left: -56%;
+    background: var(--accent); border-radius: 50%;
+    will-change: transform;
+  }
+
+  /* Pastillas */
+  .pills { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+  .pill { position: absolute; }
+  .pill__in {
+    display: inline-block; padding: 0.7rem 1.15rem; border-radius: var(--radius);
+    background: var(--cal); color: var(--tinta); white-space: nowrap;
+    font-family: var(--font-display); font-stretch: 105%; font-weight: 750; font-size: var(--step--1);
+    box-shadow: 0 10px 28px rgb(0 0 0 / 0.35);
+  }
+  .pill--1 { left: 5%;  top: 56%; rotate: -6deg; }
+  .pill--2 { right: 4%; top: 49%; rotate: 5deg; }
+  .pill--3 { left: 12%; top: 76%; rotate: 4deg; }
+
+  /* Pie del hero */
+  .hero__foot {
+    position: absolute; z-index: 6; left: var(--gutter); right: var(--gutter); bottom: 1.5rem;
+    display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start;
+  }
+  .hero__lead { max-width: 22rem; text-wrap: balance; font-size: var(--step-0); text-shadow: 0 1px 12px var(--noche); }
+  .hero__note { display: none; }
+  .hand { font-family: var(--font-hand); font-size: 1.7rem; line-height: 1.1; color: var(--accent-text); }
+  .arrow { width: 5.5rem; }
+
+  /* Móvil: titular → texto y botón → retrato abajo */
+  @media (max-width: 51.99rem) {
+    .hero { --pw: min(92vw, 50svh); }
+    .hero__title { font-size: 12vw; }
+    .hero__word { top: 49%; font-size: 11vw; }
+    .hero__foot { bottom: auto; top: calc(5.5rem + 35vw + 1.25rem); }
+    .hero__lead { max-width: 19rem; }
+    .pill--1 { left: 2%; top: auto; bottom: 36%; }
+    .pill--2 { right: 2%; top: auto; bottom: 49%; }
+    .pill--3 { left: 6%; top: auto; bottom: 17%; }
+    .pill__in { padding: 0.55rem 0.9rem; font-size: 0.78rem; }
+  }
+
+  /* Escritorio: titular centrado, texto abajo a la izquierda, nota abajo a la derecha */
+  @media (min-width: 52rem) {
+    .hero { --pw: min(40vw, 61svh); }
+    .hero__title { padding-top: 6rem; }
+    .hero__word { top: 30%; font-size: 11vw; }
+    .hero__foot { bottom: 2.5rem; right: auto; max-width: 25rem; }
+    .hero__lead { font-size: var(--step-1); line-height: 1.3; max-width: 20rem; }
+    .pill--1 { left: calc(50% - var(--pw) * 0.82); top: 46%; }
+    .pill--2 { right: calc(50% - var(--pw) * 0.86); left: auto; top: 40%; }
+    .pill--3 { left: auto; right: calc(50% - var(--pw) * 0.72); top: 68%; rotate: -4deg; }
+    .pill__in { padding: 0.8rem 1.3rem; font-size: var(--step-0); }
+    .hero__note {
+      display: block; position: absolute; z-index: 6; right: var(--gutter); bottom: 2.5rem;
+      width: 15rem; text-align: left; font-size: 2rem;
+    }
+    .arrow { position: absolute; width: 6rem; left: -5.5rem; top: -3.5rem; transform: scaleX(-1); }
+  }
+</style>
