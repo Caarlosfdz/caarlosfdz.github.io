@@ -32,5 +32,4 @@ npm run preview  # sirve /dist
 - [ ] `email` en `src/config/contacto.ts`
 - [ ] `whatsapp` en `src/config/contacto.ts` (botón principal de la web)
 - [ ] `instagram` en `src/config/contacto.ts`
-- [ ] Elegir el color de acento y borrar `AccentSwitcher.astro` (temporal de la fase 1)
 - [ ] Textos marcados con `[REVISAR]` en `src/content/proyectos/`

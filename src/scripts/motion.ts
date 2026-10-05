@@ -30,11 +30,13 @@ function hero() {
     // Entrada: líneas con máscara, círculo que escala, retrato, pastillas y pie.
     const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
     tl.from('.line__in', { yPercent: 110, duration: 1.1, stagger: 0.12 })
+      .from('.hero__halo', { opacity: 0, duration: 1.6 }, 0.1)
       .from('.hero__circle', { scale: 0, transformOrigin: '50% 60%', duration: 1.2, ease: 'expo.out' }, 0.1)
       .from('.hero__portrait img', { yPercent: 8, opacity: 0, duration: 1.1 }, 0.25)
-      .from('.hero__word', { opacity: 0, duration: 1.2 }, 0.2)
+      .from('.hero__rim', { opacity: 0, duration: 1.2 }, 0.9)
+      .from('.hero__word', { opacity: 0, yPercent: 12, duration: 1.3 }, 0.2)
       .from('.pill__in', { scale: 0.6, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'back.out(1.7)' }, 0.7)
-      .from('.hero__foot > *, .hero__note', { y: 24, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.8);
+      .from('.hero__foot > *, .hero__note, .meta', { y: 24, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.8);
 
     // Flecha manuscrita que se dibuja
     document.querySelectorAll<SVGPathElement>('.arrow__path').forEach((p) => {
@@ -50,7 +52,7 @@ function hero() {
 
     // "PORTFOLIO" con parallax al bajar
     gsap.to('.hero__word', {
-      yPercent: 22,
+      y: () => window.innerHeight * 0.18,
       ease: 'none',
       scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
     });
@@ -69,9 +71,22 @@ function hero() {
       const ny = e.clientY / window.innerHeight - 0.5;
       moves.forEach((m) => { m.x(nx * m.k); m.y(ny * m.k); });
     };
+    // Profundidad: cada capa se mueve distinto con el ratón (data-depth).
+    const layers = gsap.utils.toArray<HTMLElement>('[data-depth]').map((el) => ({
+      x: gsap.quickTo(el, 'x', { duration: 1, ease: 'power3.out' }),
+      k: Number(el.dataset.depth) * 16,
+    }));
+    const onDepth = (e: PointerEvent) => {
+      const nx = e.clientX / window.innerWidth - 0.5;
+      layers.forEach((l) => l.x(nx * l.k));
+    };
     heroEl?.addEventListener('pointermove', onMove);
+    heroEl?.addEventListener('pointermove', onDepth);
 
-    const cleanups: Array<() => void> = [() => heroEl?.removeEventListener('pointermove', onMove)];
+    const cleanups: Array<() => void> = [
+      () => heroEl?.removeEventListener('pointermove', onMove),
+      () => heroEl?.removeEventListener('pointermove', onDepth),
+    ];
     document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
       const x = gsap.quickTo(el, 'x', { duration: 0.5, ease: 'power3.out' });
       const y = gsap.quickTo(el, 'y', { duration: 0.5, ease: 'power3.out' });

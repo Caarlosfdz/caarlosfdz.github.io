@@ -1,12 +1,16 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import retrato from '../assets/carlos-recorte.png';
+import Smoke from './Smoke.astro';
 import { enlacePrincipal } from '../config/contacto';
+
+// El reflejo lima de los hombros usa la silueta del retrato como máscara.
+const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
 ---
 <section class="hero" id="inicio" aria-labelledby="hero-titulo">
   <div class="hero__bg" aria-hidden="true">
-    <span class="smoke smoke--a"></span>
-    <span class="smoke smoke--b"></span>
+    <Smoke />
+    <span class="vignette"></span>
     <span class="grain"></span>
   </div>
 
@@ -15,153 +19,252 @@ import { enlacePrincipal } from '../config/contacto';
     <span class="line line--name"><span class="line__in">Carlos Fernández</span></span>
   </h1>
 
-  <div class="hero__word display" aria-hidden="true" data-parallax>PORTFOLIO</div>
-
-  <div class="hero__portrait">
-    <span class="hero__circle" aria-hidden="true"></span>
-    <Image
-      src={retrato}
-      alt="Retrato de Carlos Fernández en blanco y negro"
-      widths={[480, 720, 960]}
-      sizes="(min-width: 52rem) 44vw, 90vw"
-      format="webp"
-      loading="eager"
-      fetchpriority="high"
-    />
-  </div>
-
-  <ul class="pills" aria-label="Servicios">
-    <li class="pill pill--1"><span class="pill__in" data-pill>Diseño web</span></li>
-    <li class="pill pill--2"><span class="pill__in" data-pill>Logotipos e identidad</span></li>
-    <li class="pill pill--3"><span class="pill__in" data-pill>Redes sociales</span></li>
-  </ul>
-
   <div class="hero__foot">
     <p class="hero__lead">Diseño webs, logos y redes sociales para negocios de Cádiz que quieren que se les vea.</p>
     <a class="btn" href={enlacePrincipal} data-magnetic>
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.400 1.300-1.900 1.300-.5.100-1.100.1-1.800-.1a16 16 0 0 1-5.700-3.500c-1.100-1-2-2.400-2.100-3.600-.1-1.100.5-1.700.9-2 .3-.3.700-.3.900-.3h.600c.2 0 .4 0 .6.500l.8 1.900c.1.200.1.400 0 .6l-.5.700c-.2.200-.3.400-.1.700.7 1.100 1.600 2 2.800 2.600.3.200.5.100.7-.1l.7-.9c.2-.3.400-.2.700-.1l1.800.9c.3.100.4.200.5.300.1.200.1.800-.1 1.400Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.600-5.400A8.500 8.500 0 1 1 21 12Z"/></svg>
       Escríbeme por WhatsApp
     </a>
   </div>
+
+  <div class="hero__stage">
+    <div class="hero__word display" aria-hidden="true" data-depth="-1">PORTFOLIO</div>
+
+    <div class="hero__portrait" style={`--silueta: url(${silueta.src})`}>
+      <span class="hero__halo" aria-hidden="true"></span>
+      <span class="hero__circle" aria-hidden="true" data-depth="0.6"></span>
+      <Image
+        src={retrato}
+        alt="Retrato de Carlos Fernández en blanco y negro"
+        widths={[480, 720, 960, 1200]}
+        sizes="(min-width: 52rem) 46vw, 100vw"
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+        data-depth="1"
+      />
+      <span class="hero__rim" aria-hidden="true"></span>
+    </div>
+
+    <ul class="pills" aria-label="Servicios">
+      <li class="pill pill--1">
+        <span class="pill__in" data-pill>
+          <span class="pill__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.500" width="18" height="15" rx="2.500"/><path d="M3 9.500h18"/><circle cx="6.500" cy="7" r=".4"/></svg></span>
+          Diseño web
+        </span>
+      </li>
+      <li class="pill pill--2">
+        <span class="pill__in" data-pill>
+          <span class="pill__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.500 18.500 11 12 21.500 5.500 11Z"/><circle cx="12" cy="11" r="1.700"/></svg></span>
+          Logotipos e identidad
+        </span>
+      </li>
+      <li class="pill pill--3">
+        <span class="pill__in" data-pill>
+          <span class="pill__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20.500s-8-4.800-8-10.700A4.600 4.600 0 0 1 12 7a4.600 4.600 0 0 1 8 2.800c0 5.900-8 10.700-8 10.700Z"/></svg></span>
+          Redes sociales
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="meta meta--lugar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.100 7-11.500A7 7 0 0 0 5 9.500C5 14.900 12 21 12 21Z"/><circle cx="12" cy="9.500" r="2.500"/></svg>
+    <span><strong>Cádiz, España</strong>2º de Marketing y Publicidad</span>
+  </p>
+  <p class="meta meta--libre">
+    <span class="dot" aria-hidden="true"></span>
+    <span><strong>Disponible para proyectos</strong>Negocios locales de la provincia</span>
+  </p>
 
   <p class="hero__note hand" aria-hidden="true">
     <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="arrow__path" d="M112 8C86 4 52 12 40 44c-2 6-3 12-2 18"/><path class="arrow__path" d="M26 50l12 14 14-12"/></svg>
     ¿Tienes un negocio en Cádiz? Cuéntamelo.
   </p>
+
+  <div class="scroll" aria-hidden="true"><span>Baja</span><i></i></div>
 </section>
 
 <style>
   .hero {
-    --pw: min(88vw, 56svh);
+    --pw: min(100vw, 460px);
+    --ph: calc(var(--pw) * 1.05);
     position: relative; isolation: isolate; overflow: hidden;
-    min-height: 100svh; min-height: 100vh; min-height: 100svh;
+    min-height: 100svh;
+    display: flex; flex-direction: column;
+    padding-top: 5.25rem;
     background: var(--noche);
   }
 
-  /* Fondo: humo con degradados y un poco de ruido */
+  /* ---------- Fondo: humo, viñeta y grano ---------- */
   .hero__bg { position: absolute; inset: 0; z-index: -1; }
-  .smoke { position: absolute; border-radius: 50%; will-change: transform; }
-  .smoke--a {
-    width: 80vw; height: 80vw; left: -25vw; top: -20vw;
-    background: radial-gradient(closest-side, rgb(255 255 255 / 0.1), transparent 70%);
-    animation: drift 22s ease-in-out infinite alternate;
-  }
-  .smoke--b {
-    width: 70vw; height: 70vw; right: -25vw; bottom: -30vw;
-    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%);
-    animation: drift 28s ease-in-out infinite alternate-reverse;
+  .vignette {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 75% 65% at 50% 55%, transparent 40%, rgb(0 0 0 / 0.78) 100%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgb(0 0 0 / 0.5), transparent);
   }
   .grain {
-    position: absolute; inset: 0; opacity: 0.22; mix-blend-mode: soft-light;
+    position: absolute; inset: 0; opacity: 0.2; mix-blend-mode: soft-light; pointer-events: none;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   }
-  @keyframes drift { to { transform: translate3d(6vw, 4vw, 0) scale(1.08); } }
+  /* Fundido a negro abajo en vez de corte */
+  .hero::after {
+    content: ''; position: absolute; inset: auto 0 0 0; height: 24%; z-index: 3; pointer-events: none;
+    background: linear-gradient(to top, var(--noche) 4%, rgb(11 11 12 / 0.7) 40%, transparent);
+  }
 
-  /* Titular */
+  /* ---------- Titular ---------- */
   .hero__title {
-    position: relative; z-index: 5;
-    padding: 5.5rem var(--gutter) 0; text-align: center;
-    font-size: clamp(2.1rem, 1.2rem + 4.6vw, 5.4rem);
+    position: relative; z-index: 6; padding: 0 var(--gutter); text-align: center;
+    font-size: 12vw;
   }
   .line { display: block; overflow: hidden; padding-block: 0.06em; }
   .line__in { display: block; }
   .line--name { color: var(--accent); }
 
-  /* Palabra gigante detrás del retrato */
+  /* ---------- Pie: texto y botón ---------- */
+  .hero__foot {
+    position: relative; z-index: 6; padding: var(--space-3) var(--gutter) 0;
+    display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start;
+  }
+  .btn { white-space: nowrap; }
+  .hero__lead { max-width: 20rem; text-wrap: balance; text-shadow: 0 1px 14px var(--noche); }
+
+  /* ---------- Escenario: capas ---------- */
+  .hero__stage { position: relative; flex: 1; min-height: calc(var(--ph) + 2.5rem); }
+
   .hero__word {
-    position: absolute; z-index: 0; left: 0; right: 0; text-align: center;
-    top: 30%; font-size: 11vw; line-height: 1; white-space: nowrap;
-    color: #2a2a2f; letter-spacing: -0.03em; user-select: none;
+    position: absolute; z-index: 0; left: 0; right: 0; bottom: calc(var(--ph) * 0.7);
+    text-align: center; white-space: nowrap; user-select: none;
+    font-stretch: 62%; font-size: 21vw; line-height: 0.8; letter-spacing: -0.02em;
+    color: transparent;
+    background: linear-gradient(to bottom, #6a6a72 0%, #3a3a40 55%, #1b1b1f 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-stroke: 1.5px rgb(255 255 255 / 0.2);
   }
 
-  /* Retrato sobre círculo */
   .hero__portrait {
     position: absolute; z-index: 2; bottom: 0; left: 0; right: 0; margin-inline: auto;
-    width: var(--pw);
+    width: var(--pw); isolation: isolate;
   }
   .hero__portrait img {
     position: relative; width: 100%; height: auto;
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+    filter: contrast(1.14) brightness(1.03);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+  .hero__halo {
+    position: absolute; z-index: -3; left: 50%; bottom: -10%; width: 160%; aspect-ratio: 1;
+    margin-left: -80%; border-radius: 50%; opacity: 0.5;
+    background: radial-gradient(closest-side, var(--accent), transparent 70%);
   }
   .hero__circle {
-    position: absolute; z-index: -1; left: 50%; bottom: -4%;
-    width: 112%; aspect-ratio: 1; margin-left: -56%;
-    background: var(--accent); border-radius: 50%;
+    position: absolute; z-index: -1; left: 50%; bottom: -14%;
+    width: 106%; aspect-ratio: 1; margin-left: -53%; border-radius: 50%; overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 24%, var(--accent-hi) 0%, var(--accent) 34%, var(--accent-lo) 100%);
+    box-shadow: 0 0 80px 8px color-mix(in srgb, var(--accent) 35%, transparent);
     will-change: transform;
   }
+  .hero__circle::after { /* grano y sombra inferior */
+    content: ''; position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgb(0 0 0 / 0.5), transparent 55%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply; opacity: 0.45;
+  }
+  .hero__rim { /* luz lima rebotando en los hombros, con la silueta como máscara */
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: 0.55;
+    -webkit-mask-image: var(--silueta); mask-image: var(--silueta);
+    -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+    background:
+      radial-gradient(ellipse 34% 30% at 3% 84%, var(--accent), transparent 70%),
+      radial-gradient(ellipse 34% 30% at 97% 84%, var(--accent), transparent 70%),
+      radial-gradient(ellipse 40% 12% at 50% 100%, var(--accent), transparent 70%);
+  }
 
-  /* Pastillas */
+  /* ---------- Pastillas ---------- */
   .pills { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
   .pill { position: absolute; }
   .pill__in {
-    display: inline-block; padding: 0.7rem 1.15rem; border-radius: var(--radius);
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.4rem 1rem 0.4rem 0.4rem; border-radius: var(--radius);
     background: var(--cal); color: var(--tinta); white-space: nowrap;
-    font-family: var(--font-display); font-stretch: 105%; font-weight: 750; font-size: var(--step--1);
-    box-shadow: 0 10px 28px rgb(0 0 0 / 0.35);
+    font-family: var(--font-display); font-stretch: 105%; font-weight: 750;
+    font-size: 0.8rem; line-height: 1;
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.8) inset, 0 14px 30px rgb(0 0 0 / 0.5), 0 3px 8px rgb(0 0 0 / 0.35);
   }
-  .pill--1 { left: 5%;  top: 56%; rotate: -6deg; }
-  .pill--2 { right: 4%; top: 49%; rotate: 5deg; }
-  .pill--3 { left: 12%; top: 76%; rotate: 4deg; }
-
-  /* Pie del hero */
-  .hero__foot {
-    position: absolute; z-index: 6; left: var(--gutter); right: var(--gutter); bottom: 1.5rem;
-    display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start;
+  .pill__icon {
+    display: grid; place-items: center; flex: none;
+    width: 1.9rem; aspect-ratio: 1; border-radius: 50%;
+    background: var(--noche); color: var(--accent);
   }
-  .hero__lead { max-width: 22rem; text-wrap: balance; font-size: var(--step-0); text-shadow: 0 1px 12px var(--noche); }
-  .hero__note { display: none; }
-  .hand { font-family: var(--font-hand); font-size: 1.7rem; line-height: 1.1; color: var(--accent-text); }
-  .arrow { width: 5.5rem; }
+  .pill__icon svg { width: 55%; height: 55%; }
+  .pill--1 { left: 2%; bottom: calc(var(--ph) * 0.36); rotate: -6deg; }
+  .pill--2 { right: 2%; bottom: calc(var(--ph) * 0.23); rotate: 5deg; }
+  .pill--3 { left: 9%; bottom: calc(var(--ph) * 0.1); rotate: -3deg; }
 
-  /* Móvil: titular → texto y botón → retrato abajo */
+  /* ---------- Detalles laterales (solo escritorio) ---------- */
+  .meta, .hero__note, .scroll { display: none; }
+  .hand { font-family: var(--font-hand); font-size: 1.7rem; line-height: 1.1; color: var(--accent); }
+
   @media (max-width: 51.99rem) {
-    .hero { --pw: min(92vw, 50svh); }
-    .hero__title { font-size: 12vw; }
-    .hero__word { top: 49%; font-size: 11vw; }
-    .hero__foot { bottom: auto; top: calc(5.5rem + 35vw + 1.25rem); }
-    .hero__lead { max-width: 19rem; }
-    .pill--1 { left: 2%; top: auto; bottom: 36%; }
-    .pill--2 { right: 2%; top: auto; bottom: 49%; }
-    .pill--3 { left: 6%; top: auto; bottom: 17%; }
-    .pill__in { padding: 0.55rem 0.9rem; font-size: 0.78rem; }
+    .hero__title { margin-top: 0.5rem; }
+    .hero__word { bottom: calc(var(--ph) * 0.86); }
+    .hero__foot { padding-bottom: var(--space-2); }
   }
 
-  /* Escritorio: titular centrado, texto abajo a la izquierda, nota abajo a la derecha */
+  /* ---------- Escritorio ---------- */
   @media (min-width: 52rem) {
-    .hero { --pw: min(40vw, 61svh); }
-    .hero__title { padding-top: 6rem; }
-    .hero__word { top: 30%; font-size: 11vw; }
-    .hero__foot { bottom: 2.5rem; right: auto; max-width: 25rem; }
-    .hero__lead { font-size: var(--step-1); line-height: 1.3; max-width: 20rem; }
-    .pill--1 { left: calc(50% - var(--pw) * 0.82); top: 46%; }
-    .pill--2 { right: calc(50% - var(--pw) * 0.86); left: auto; top: 40%; }
-    .pill--3 { left: auto; right: calc(50% - var(--pw) * 0.72); top: 68%; rotate: -4deg; }
-    .pill__in { padding: 0.8rem 1.3rem; font-size: var(--step-0); }
-    .hero__note {
-      display: block; position: absolute; z-index: 6; right: var(--gutter); bottom: 2.5rem;
-      width: 15rem; text-align: left; font-size: 2rem;
+    .hero {
+      --pw: min(46vw, calc((100svh - 13.5rem) * 0.95));
+      display: block; padding-top: 0;
     }
-    .arrow { position: absolute; width: 6rem; left: -5.5rem; top: -3.5rem; transform: scaleX(-1); }
+    .hero__title { position: absolute; top: 5.2rem; left: 0; right: 0; font-size: clamp(2.4rem, 1rem + 3.9vw, 4.6rem); }
+    .hero__stage { position: absolute; inset: 0; min-height: 0; }
+    .hero__foot { position: absolute; left: var(--gutter); bottom: 2.75rem; padding: 0; }
+    .hero__lead { font-size: var(--step-1); line-height: 1.28; max-width: 21rem; }
+
+    .hero__word { bottom: calc(var(--ph) * 0.64); font-size: 19.5vw; }
+
+    .pill__in { gap: 0.75rem; padding: 0.55rem 1.5rem 0.55rem 0.55rem; font-size: var(--step-0); }
+    .pill__icon { width: 2.7rem; }
+    .pill--1 { left: calc(50% - var(--pw) * 0.86); bottom: calc(var(--ph) * 0.6); rotate: -7deg; }
+    .pill--2 { right: calc(50% - var(--pw) * 0.9); left: auto; bottom: calc(var(--ph) * 0.7); rotate: 5deg; }
+    .pill--3 { left: calc(50% + var(--pw) * 0.1); bottom: calc(var(--ph) * 0.16); rotate: -4deg; }
+
+    .meta {
+      display: flex; gap: 0.7rem; align-items: flex-start; position: absolute; z-index: 6;
+      font-size: var(--step--1); line-height: 1.35; color: rgb(236 233 228 / 0.7); max-width: 13rem;
+    }
+    .meta strong { display: block; color: var(--cal); font-weight: 600; }
+    .meta svg { width: 1.35rem; height: 1.35rem; flex: none; color: var(--accent); margin-top: 0.1rem; }
+    @media (max-height: 800px) { .meta { display: none; } }
+    .meta--lugar { left: var(--gutter); top: 61%; }
+    .meta--libre { right: var(--gutter); top: 61%; }
+    .dot {
+      width: 0.7rem; height: 0.7rem; flex: none; margin-top: 0.4rem; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 0 0 var(--accent); animation: ping 2.4s ease-out infinite;
+    }
+    @keyframes ping { 70%, 100% { box-shadow: 0 0 0 0.7rem transparent; } }
+
+    .hero__note {
+      display: block; position: absolute; z-index: 6; right: var(--gutter); bottom: 2.75rem;
+      width: 17rem; font-size: 2rem;
+    }
+    .arrow { position: absolute; width: 5.5rem; left: -5rem; top: -3.5rem; transform: scaleX(-1); }
+
+    .scroll {
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      position: absolute; z-index: 6; left: 50%; bottom: 0.9rem; translate: -50% 0;
+      font-size: 0.78rem; letter-spacing: 0.04em; color: rgb(236 233 228 / 0.75);
+    }
+    .scroll i { width: 1px; height: 2.2rem; background: rgb(236 233 228 / 0.25); overflow: hidden; position: relative; }
+    .scroll i::after {
+      content: ''; position: absolute; inset: 0; background: var(--accent);
+      transform-origin: top; animation: drip 2.2s ease-in-out infinite;
+    }
+    @keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
   }
 </style>

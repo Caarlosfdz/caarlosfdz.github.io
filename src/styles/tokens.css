@@ -7,7 +7,8 @@
   --humo: #2a2a2d;
   --accent: #c6f135; /* ← cambiar el acento = tocar solo esta línea */
   --on-accent: #0b0b0c; /* texto sobre el acento */
-  --accent-text: var(--accent); /* acento para texto pequeño sobre fondo oscuro */
+  --accent-hi: color-mix(in srgb, var(--accent) 55%, white);
+  --accent-lo: color-mix(in srgb, var(--accent) 78%, black);
 
   /* Tipografía */
   --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
@@ -32,7 +33,3 @@
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --radius: 999px;
 }
-
-/* TEMPORAL (fase 1): las tres versiones de color para elegir. */
-:root[data-accent='cobalto'] { --accent: #2f4bff; --on-accent: #ffffff; --accent-text: #8c9bff; }
-:root[data-accent='bermellon'] { --accent: #ff4a1c; --on-accent: #0b0b0c; }

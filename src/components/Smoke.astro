@@ -1,0 +1,40 @@
+---
+// Humo fluido hecho solo con SVG y CSS: cintas de seda difuminadas que derivan despacio.
+---
+<svg class="smoke" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="silk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0" />
+      <stop offset="0.45" stop-color="#fff" stop-opacity="0.34" />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="silk-lime" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="var(--accent)" stop-opacity="0" />
+      <stop offset="0.5" stop-color="var(--accent)" stop-opacity="0.28" />
+      <stop offset="1" stop-color="var(--accent)" stop-opacity="0" />
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="22" /></filter>
+    <filter id="edge" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" /></filter>
+  </defs>
+  <g class="ribbon ribbon--a">
+    <path d="M-120 760C170 690 300 430 150 -80" stroke="url(#silk)" stroke-width="120" fill="none" filter="url(#soft)" />
+    <path d="M-60 780C230 700 350 440 230 -60" stroke="url(#silk)" stroke-width="5" fill="none" filter="url(#edge)" opacity="0.7" />
+  </g>
+  <g class="ribbon ribbon--b">
+    <path d="M1560 60C1270 190 1390 520 1040 990" stroke="url(#silk)" stroke-width="130" fill="none" filter="url(#soft)" />
+    <path d="M1530 120C1250 250 1330 540 1010 960" stroke="url(#silk)" stroke-width="4" fill="none" filter="url(#edge)" opacity="0.6" />
+  </g>
+  <g class="ribbon ribbon--c">
+    <path d="M200 980C470 760 880 880 1300 620" stroke="url(#silk-lime)" stroke-width="150" fill="none" filter="url(#soft)" />
+  </g>
+</svg>
+
+<style>
+  .smoke { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ribbon { will-change: transform; transform-box: fill-box; transform-origin: center; }
+  .ribbon--a { animation: sway-a 24s ease-in-out infinite alternate; }
+  .ribbon--b { animation: sway-b 30s ease-in-out infinite alternate; }
+  .ribbon--c { animation: sway-a 36s ease-in-out infinite alternate-reverse; }
+  @keyframes sway-a { to { transform: translate3d(40px, -24px, 0) rotate(2deg); } }
+  @keyframes sway-b { to { transform: translate3d(-46px, 20px, 0) rotate(-2.5deg); } }
+</style>
