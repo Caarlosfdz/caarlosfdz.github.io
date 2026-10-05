@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import retrato from '../assets/carlos-recorte.png';
+import Smoke from './Smoke.astro';
+---
+<section class="about section section--light" id="sobre-mi" aria-labelledby="about-h">
+  <div class="section__bg" aria-hidden="true"><Smoke tone="light" uid="about" /><span class="grain"></span></div>
+
+  <div class="wrap about__grid">
+    <div class="about__text">
+      <h2 class="h2" id="about-h" data-lines>
+        <span class="line"><span class="line__in">Sobre mí.</span></span>
+      </h2>
+      <p class="about__lead">Soy Carlos, estudio 2º de Grado Superior de <span class="hl">Marketing y Publicidad</span> en Cádiz y quiero que los negocios de aquí se vean en internet tan bien como se ven en la calle.</p>
+      <p>Diseño <span class="hl">webs</span>, <span class="hl">logotipos e identidad</span> y llevo <span class="hl">redes sociales</span>. Trabajo con negocios locales de la provincia: hostelería, salud y bienestar, belleza y estética.</p>
+      <p>Mi objetivo es sencillo: que cuando alguien vea tu negocio en internet, <span class="hl">te escriba</span>.</p>
+      <p class="about__note hand" aria-hidden="true">
+        <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M10 12C40 4 82 14 94 46c2 6 3 12 2 18"/><path data-draw d="M82 52l14 14 14-12"/></svg>
+        así me ves cuando hablamos
+      </p>
+    </div>
+
+    <figure class="about__fig">
+      <div class="arch" data-parallax-card>
+        <span class="arch__glow" aria-hidden="true"></span>
+        <Image src={retrato} alt="Carlos Fernández, retrato en blanco y negro" widths={[420, 640, 900]} sizes="(min-width: 52rem) 38vw, 80vw" format="webp" loading="lazy" />
+      </div>
+      <svg class="badge" viewBox="0 0 160 160" aria-hidden="true">
+        <circle cx="80" cy="80" r="78" fill="#ece9e4" stroke="#141414" stroke-width="1.5"/>
+        <defs><path id="circ" d="M80 80m-60 0a60 60 0 1 1 120 0a60 60 0 1 1-120 0"/></defs>
+        <text><textPath href="#circ" startOffset="0">diseño web • logotipos • redes sociales • Cádiz •</textPath></text>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .about__grid { display: grid; gap: var(--space-5); align-items: center; }
+  .about__text { display: grid; gap: var(--space-3); max-width: 38rem; }
+  .about__text p { max-width: 36rem; }
+  .about__lead { font-size: var(--step-1); line-height: 1.35; font-weight: 500; }
+  .about__note { display: flex; align-items: flex-end; gap: 0.5rem; margin-top: var(--space-2); transform: rotate(-3deg); }
+  .about__note .arrow { transform: scaleX(-1) rotate(-20deg); }
+
+  .about__fig { position: relative; margin: 0 auto; width: min(100%, 26rem); }
+  .arch {
+    position: relative; overflow: hidden; border-radius: 999px 999px 1.5rem 1.5rem; aspect-ratio: 4 / 5;
+    background: radial-gradient(circle at 50% 28%, var(--accent-hi), var(--accent) 45%, var(--accent-lo) 130%);
+    box-shadow: 0 40px 70px -20px rgb(0 0 0 / 0.45), 0 0 0 10px var(--cal), 0 0 0 11.5px var(--tinta);
+  }
+  .arch :global(img) { position: absolute; bottom: -4%; left: 50%; width: 112%; height: auto; max-width: none; translate: -50% 0;
+    filter: contrast(1.12); }
+  .arch__glow { position: absolute; inset: auto -20% -30% -20%; height: 70%; background: radial-gradient(closest-side, rgb(255 255 255 / 0.5), transparent); mix-blend-mode: soft-light; }
+  .badge { position: absolute; right: -2.2rem; bottom: 3rem; width: 8.5rem; height: 8.5rem; animation: spin 24s linear infinite; }
+  .badge text { font: 800 13px var(--font-display); font-stretch: 112%; fill: var(--tinta); letter-spacing: 0.05em; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (min-width: 52rem) {
+    .about__grid { grid-template-columns: 1.15fr 0.85fr; gap: var(--space-6); }
+    .about__fig { width: 100%; max-width: 27rem; justify-self: end; }
+  }
+</style>

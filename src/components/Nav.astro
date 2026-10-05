@@ -1,13 +1,14 @@
 ---
 import { enlacePrincipal } from '../config/contacto';
 ---
-<header class="nav">
+<header class="nav" data-nav>
   <a class="nav__logo" href="/" aria-label="Carlos Fernández, inicio">Carlos Fernández</a>
   <nav aria-label="Principal">
     <ul class="nav__links">
       <li><a href="#proyectos">Proyectos</a></li>
       <li><a href="#servicios">Servicios</a></li>
       <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#trayectoria">Trayectoria</a></li>
     </ul>
   </nav>
   <a class="nav__cta" href={enlacePrincipal} data-magnetic>Hablemos</a>
@@ -15,10 +16,14 @@ import { enlacePrincipal } from '../config/contacto';
 
 <style>
   .nav {
-    position: absolute; inset: 0 0 auto 0; z-index: 20;
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    background: rgb(11 11 12 / 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s, backdrop-filter 0.3s;
     display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
-    padding: 1.25rem var(--gutter);
+    padding: 1rem var(--gutter);
   }
+  :global(.nav--top) { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  :global(.nav--hidden) { transform: translateY(-110%); }
   .nav__logo {
     font-family: var(--font-display); font-stretch: 112%; font-weight: 800;
     text-decoration: none; font-size: var(--step-0); letter-spacing: -0.01em;

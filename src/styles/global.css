@@ -16,7 +16,7 @@ body {
 img, svg { display: block; max-width: 100%; }
 a { color: inherit; }
 h1, h2, h3, p { margin: 0; }
-ul { margin: 0; padding: 0; list-style: none; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
 
 :focus-visible {
   outline: 3px solid var(--accent);
@@ -60,3 +60,41 @@ ul { margin: 0; padding: 0; list-style: none; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---------- Estructura común de secciones ---------- */
+.wrap { width: 100%; max-width: 82rem; margin-inline: auto; padding-inline: var(--gutter); }
+.section { position: relative; isolation: isolate; overflow: hidden; padding-block: clamp(4.5rem, 10vw, 9rem); }
+.section--light { background: var(--cal); color: var(--tinta); }
+.section--dark { background: var(--noche); color: var(--cal); }
+.section__bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.grain {
+  position: absolute; inset: 0; opacity: 0.2; mix-blend-mode: soft-light; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.section--light .grain { mix-blend-mode: multiply; opacity: 0.12; }
+
+.h2 {
+  font-family: var(--font-display); font-weight: 900; font-stretch: 125%;
+  font-size: clamp(2.3rem, 1.2rem + 5vw, 5.6rem); line-height: 0.95; letter-spacing: -0.025em;
+}
+.line { display: block; overflow: hidden; padding-block: 0.06em; }
+.line__in { display: block; }
+
+.hand { font-family: var(--font-hand); font-size: 1.7rem; line-height: 1.1; color: var(--accent); }
+.section--light .hand { color: var(--tinta); }
+.arrow { width: 5rem; height: auto; }
+
+/* Subrayador: la barra lima se pinta (scaleX) sobre la frase */
+.hl { position: relative; z-index: 0; white-space: nowrap; padding-inline: 0.12em; margin-inline: -0.12em; }
+.hl::before {
+  content: ''; position: absolute; z-index: -1; left: 0; right: 0; top: 52%; bottom: -0.05em;
+  background: var(--accent); border-radius: 0.2em 0.5em 0.3em 0.45em; transform-origin: left center;
+  transform: rotate(-0.8deg);
+}
+.js .hl::before { transform: rotate(-0.8deg) scaleX(0); }
+.js .hl.is-on::before { transform: rotate(-0.8deg) scaleX(1); transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) { .js .hl::before { transform: rotate(-0.8deg) scaleX(1); } }
+
+.btn--ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 1.5px currentColor; }
+.btn--ghost:hover { background: var(--accent); color: var(--on-accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.btn--dark { background: var(--noche); color: var(--cal); }

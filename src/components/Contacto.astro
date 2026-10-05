@@ -1,0 +1,64 @@
+---
+import { contacto, enlacePrincipal, enlaceEmail, enlaceInstagram } from '../config/contacto';
+---
+<section class="cta section" id="contacto" aria-labelledby="cta-h">
+  <div class="section__bg" aria-hidden="true">
+    <span class="cta__orb cta__orb--a"></span>
+    <span class="cta__orb cta__orb--b"></span>
+    <span class="cta__word display">HABLEMOS</span>
+    <span class="grain"></span>
+  </div>
+
+  <div class="wrap cta__in">
+    <h2 class="h2" id="cta-h" data-lines>
+      <span class="line"><span class="line__in">¿Tienes un negocio</span></span>
+      <span class="line"><span class="line__in">en Cádiz?</span></span>
+      <span class="line"><span class="line__in">Escríbeme.</span></span>
+    </h2>
+    <p class="cta__sub">Cuéntame qué necesitas y vemos si puedo ayudarte. Sin compromiso.</p>
+
+    <div class="cta__btns">
+      <a class="btn btn--dark" href={enlacePrincipal} data-magnetic>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.600-5.400A8.500 8.500 0 1 1 21 12Z"/></svg>
+        Escríbeme por WhatsApp
+      </a>
+      {enlaceEmail && <a class="btn btn--ghost" href={enlaceEmail}>{contacto.email}</a>}
+      {enlaceInstagram && <a class="btn btn--ghost" href={enlaceInstagram} rel="noopener">Instagram</a>}
+    </div>
+    {import.meta.env.DEV && !contacto.whatsapp && <p class="cta__dev">Solo en local: rellena tus datos en src/config/contacto.ts</p>}
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <a class="foot__logo display" href="#inicio">Carlos Fernández</a>
+    <p>Diseño web, logotipos e identidad y redes sociales para negocios de Cádiz.</p>
+    <nav aria-label="Pie">
+      <a href="#proyectos">Proyectos</a><a href="#servicios">Servicios</a><a href="#sobre-mi">Sobre mí</a><a href="#inicio">Volver arriba</a>
+    </nav>
+    <p class="foot__c">© 2026 Carlos Fernández. Cádiz, España.</p>
+  </div>
+</footer>
+
+<style>
+  .cta { background: linear-gradient(160deg, var(--accent-hi), var(--accent) 45%, var(--accent-lo) 150%); color: var(--on-accent); padding-block: clamp(5rem, 12vw, 11rem); }
+  .cta__orb { position: absolute; border-radius: 50%; }
+  .cta__orb--a { width: 55vmax; aspect-ratio: 1; right: -18vmax; top: -22vmax; background: radial-gradient(closest-side, rgb(255 255 255 / 0.55), transparent 70%); }
+  .cta__orb--b { width: 46vmax; aspect-ratio: 1; left: -16vmax; bottom: -26vmax; background: radial-gradient(closest-side, rgb(0 0 0 / 0.4), transparent 70%); }
+  .cta__word { position: absolute; left: 50%; bottom: -0.12em; translate: -50% 0; font-size: 21vw; font-stretch: 62%; line-height: 0.8; white-space: nowrap;
+    color: transparent; -webkit-text-stroke: 2px rgb(0 0 0 / 0.16); letter-spacing: -0.02em; user-select: none; }
+  .cta .grain { mix-blend-mode: multiply; opacity: 0.18; }
+  .cta__in { display: grid; gap: var(--space-3); justify-items: start; position: relative; }
+  .cta__sub { font-size: var(--step-1); max-width: 30rem; font-weight: 500; }
+  .cta__btns { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+  .cta__dev { font-size: var(--step--1); opacity: 0.7; }
+
+  .foot { background: var(--noche); color: var(--cal); padding-block: var(--space-5); }
+  .foot__in { display: grid; gap: var(--space-3); }
+  .foot__logo { font-size: var(--step-2); text-decoration: none; }
+  .foot p { max-width: 28rem; color: rgb(236 233 228 / 0.7); }
+  .foot nav { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .foot nav a { text-decoration: none; font-weight: 500; opacity: 0.85; }
+  .foot nav a:hover { color: var(--accent); }
+  .foot__c { font-size: var(--step--1); }
+</style>

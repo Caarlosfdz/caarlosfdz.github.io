@@ -1,0 +1,155 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Smoke from './Smoke.astro';
+import n1 from '../assets/proyectos/nernutri-01-inicio-hero.png';
+import n2 from '../assets/proyectos/nernutri-05-como-funciona.png';
+import n3 from '../assets/proyectos/nernutri-06-testimonios.png';
+import m1 from '../assets/proyectos/mueble-01-hero.png';
+import m2 from '../assets/proyectos/mueble-10-admin-dashboard.png';
+import m3 from '../assets/proyectos/mueble-07-formulario.png';
+import mchat from '../assets/proyectos/mueble-08-chat-asistente.png';
+
+const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+
+// Capturas de cada proyecto (se enseñan siempre por debajo de su tamaño real).
+const imagenes: Record<string, { main: ImageMetadata; second: ImageMetadata; third?: ImageMetadata; phone?: ImageMetadata; host: string }> = {
+  nernutri: { main: n1, second: n2, third: n3, host: 'nernutri.es' },
+  'tarjeta-socio': { main: m1, second: m2, third: m3, phone: mchat, host: 'Proyecto de clase' },
+};
+const host = (u: string) => { try { return new URL(u).hostname; } catch { return ''; } };
+---
+<section class="proyectos section section--light" id="proyectos" aria-labelledby="proy-h">
+  <div class="section__bg" aria-hidden="true"><Smoke tone="light" uid="proy" /><span class="grain"></span></div>
+
+  <div class="wrap">
+    <header class="proy__head">
+      <h2 class="h2" id="proy-h" data-lines><span class="line"><span class="line__in">Proyectos.</span></span></h2>
+      <p class="hand proy__hand" aria-hidden="true">
+        <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M10 12C40 4 82 14 94 46c2 6 3 12 2 18"/><path data-draw d="M82 52l14 14 14-12"/></svg>
+        lo que he hecho hasta ahora
+      </p>
+    </header>
+
+    <div class="stack">
+      {proyectos.map((p, i) => {
+        const d = p.data;
+        const img = imagenes[p.id];
+        const proximo = d.estado === 'proximamente';
+        const href = proximo ? undefined : `/proyectos/${p.id}/`;
+        const Tag = href ? 'a' : 'div';
+        return (
+          <div class="wrap-card" style={`--i:${i}`} data-card>
+            <article class:list={['card', { 'card--next': proximo }]}>
+              <span class="card__num display" aria-hidden="true" data-num>{String(d.orden).padStart(2, '0')}</span>
+              <span class="card__glow" aria-hidden="true"></span>
+              <span class="card__veil" aria-hidden="true"></span>
+
+              <div class="card__copy">
+                {d.etiqueta && <p class:list={['tag', { 'tag--edu': d.etiqueta === 'Proyecto académico' }]}>{d.etiqueta}</p>}
+                <h3 class="card__title display">
+                  {href ? <a href={href} data-cursor="Ver proyecto" class="card__link">{d.titulo}</a> : (d.titulo || 'Próximamente')}
+                </h3>
+                {proximo && !d.resumen && <p class="card__sum">Aquí irá el proyecto 03. Estoy preparándolo.</p>}
+                {d.resumen && <p class="card__sum">{d.resumen}</p>}
+                {d.aviso && <p class="card__aviso">{d.aviso}</p>}
+                <dl class="card__meta">
+                  {d.papel && (<div><dt>Mi papel</dt><dd>{d.papel}</dd></div>)}
+                  {d.url && (<div><dt>En vivo</dt><dd>{host(d.url) || 'Ver enlace'}</dd></div>)}
+                </dl>
+                {href && <a class="btn card__btn" href={href} data-magnetic>Ver proyecto</a>}
+              </div>
+
+              <div class="mocks" data-tilt aria-hidden={img ? undefined : 'true'}>
+                {img ? (
+                  <>
+                    <figure class="win win--1"><div class="win__bar"><i></i><i></i><i></i><span>{img.host}</span></div><Image src={img.main} alt={`Captura de ${d.titulo}`} widths={[480, 720, 960]} sizes="(min-width: 52rem) 40vw, 90vw" format="webp" loading="lazy" /></figure>
+                    <figure class="win win--2"><div class="win__bar"><i></i><i></i><i></i></div><Image src={img.second} alt={`Otra sección de ${d.titulo}`} widths={[360, 560, 760]} sizes="(min-width: 52rem) 26vw, 60vw" format="webp" loading="lazy" /></figure>
+                    {img.third && <figure class="win win--3"><div class="win__bar"><i></i><i></i><i></i></div><Image src={img.third} alt={`Sección de ${d.titulo}`} widths={[360, 560]} sizes="(min-width: 52rem) 20vw, 45vw" format="webp" loading="lazy" /></figure>}
+                    {img.phone && <figure class="phone"><Image src={img.phone} alt="Chat de asistente de la landing" widths={[200, 300, 400]} sizes="(min-width: 52rem) 12vw, 28vw" format="webp" loading="lazy" /></figure>}
+                  </>
+                ) : (
+                  <>
+                    <div class="win win--1 win--ghost"><div class="win__bar"><i></i><i></i><i></i></div><div class="ghost"><b></b><b></b><b></b></div></div>
+                    <div class="win win--2 win--ghost"><div class="win__bar"><i></i><i></i><i></i></div><div class="ghost"><b></b><b></b></div></div>
+                  </>
+                )}
+              </div>
+            </article>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .proy__head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-3) var(--space-4); margin-bottom: var(--space-5); }
+  .proy__hand { display: flex; align-items: flex-end; gap: 0.4rem; margin-bottom: 0.6rem; transform: rotate(-3deg); }
+  .proy__hand .arrow { width: 3.8rem; transform: scaleX(-1) rotate(-15deg); }
+
+  .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+  .card {
+    position: relative; isolation: isolate; overflow: hidden; border-radius: 1.75rem;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); padding: clamp(1.25rem, 3.5vw, 3.5rem); min-width: 0;
+    background: var(--noche); color: var(--cal);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.07);
+  }
+  .card__num {
+    position: absolute; z-index: -1; right: 1rem; top: -0.12em; font-size: clamp(9rem, 6rem + 18vw, 24rem);
+    color: transparent; -webkit-text-stroke: 2px rgb(255 255 255 / 0.22); line-height: 1; user-select: none; will-change: transform;
+  }
+  .card__glow { position: absolute; z-index: -1; inset: 0; border-radius: inherit;
+    background:
+      radial-gradient(ellipse 28% 55% at 100% 55%, color-mix(in srgb, var(--accent) 55%, transparent), transparent 70%),
+      radial-gradient(ellipse 22% 45% at 0% 100%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%),
+      radial-gradient(ellipse 40% 30% at 50% -8%, rgb(255 255 255 / 0.28), transparent 70%); }
+  .card::before { content: ''; position: absolute; z-index: -1; left: 50%; top: 0; width: 38%; height: 3px; translate: -50% 0; background: rgb(255 255 255 / 0.85); box-shadow: 0 0 40px 10px rgb(255 255 255 / 0.35); border-radius: 3px; }
+  .card__veil { position: absolute; inset: 0; z-index: 5; background: #000; opacity: 0; pointer-events: none; }
+  .card::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0.16; mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+  .card__copy { display: grid; gap: var(--space-2); align-content: center; justify-items: start; }
+  .tag { display: inline-block; padding: 0.3rem 0.8rem; border-radius: var(--radius); font-size: var(--step--1); font-weight: 600;
+    background: rgb(255 255 255 / 0.1); color: var(--cal); }
+  .tag--edu { background: var(--accent); color: var(--on-accent); }
+  .card__title { font-size: clamp(2rem, 1.2rem + 4.4vw, 5rem); overflow-wrap: break-word; }
+  .card--next .card__title { font-size: clamp(1.7rem, 1rem + 3vw, 3.4rem); }
+  .card__link { text-decoration: none; }
+  .card__link::after { content: ''; position: absolute; inset: 0; z-index: 4; }
+  .card__sum { max-width: 28rem; color: rgb(236 233 228 / 0.82); }
+  .card__aviso { max-width: 28rem; font-size: var(--step--1); padding-left: 0.8rem; border-left: 2px solid var(--accent); color: var(--cal); }
+  .card__meta { display: grid; gap: 0.5rem; margin: 0.5rem 0 0; font-size: var(--step--1); }
+  .card__meta div { display: flex; gap: 0.8rem; }
+  .card__meta dt { color: rgb(236 233 228 / 0.55); min-width: 4.8rem; }
+  .card__meta dd { margin: 0; font-weight: 600; }
+  .card__btn { margin-top: var(--space-2); position: relative; z-index: 6; }
+
+  /* Mockups */
+  .mocks { position: relative; aspect-ratio: 16 / 12.5; transform-style: preserve-3d; perspective: 1200px; }
+  .win { position: absolute; margin: 0; border-radius: 0.8rem; overflow: hidden; background: #1a1a1d;
+    box-shadow: 0 30px 60px -15px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.1); will-change: transform; }
+  .win :global(img) { width: 100%; height: auto; display: block; }
+  .win__bar { display: flex; align-items: center; gap: 0.3rem; padding: 0.45rem 0.7rem; background: #232327; }
+  .win__bar i { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: #55555c; }
+  .win__bar span { margin-left: 0.6rem; flex: 1; padding: 0.15rem 0.7rem; border-radius: var(--radius); background: #0e0e10; color: #a8a8ae; font-size: 0.7rem; text-align: left; }
+  .win--1 { width: 82%; right: 0; top: 0; z-index: 1; }
+  .win--2 { width: 54%; left: 0; bottom: 6%; z-index: 2; translate: 0 0; }
+  .win--3 { width: 38%; right: 4%; bottom: 0; z-index: 3; }
+  .phone { position: absolute; z-index: 4; margin: 0; width: 22%; left: 40%; bottom: -3%; border-radius: 1.4rem; overflow: hidden;
+    border: 5px solid #0a0a0b; box-shadow: 0 30px 60px -10px rgb(0 0 0 / 0.8), 0 0 0 1.5px #3a3a40; background: #fff; }
+  .phone :global(img) { width: 100%; height: auto; }
+  .win--ghost { background: transparent; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.25); border: 1.5px dashed rgb(255 255 255 / 0.3); }
+  .ghost { display: grid; gap: 0.7rem; padding: 1.2rem; aspect-ratio: 16 / 10; align-content: start; }
+  .ghost b { display: block; height: 0.9rem; border-radius: var(--radius); background: rgb(255 255 255 / 0.12); }
+  .ghost b:first-child { width: 60%; height: 1.6rem; background: color-mix(in srgb, var(--accent) 40%, transparent); }
+  .ghost b:nth-child(2) { width: 90%; } .ghost b:nth-child(3) { width: 45%; }
+
+  @media (min-width: 52rem) {
+    .card { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; min-height: min(34rem, 72svh); }
+    .stack { gap: 0; }
+    .wrap-card { position: sticky; top: calc(5.4rem + var(--i) * 1.1rem); padding-bottom: 14vh; }
+    .wrap-card:last-child { padding-bottom: 0; }
+  }
+  @media (max-width: 51.99rem) { .mocks { margin-top: var(--space-2); } }
+</style>

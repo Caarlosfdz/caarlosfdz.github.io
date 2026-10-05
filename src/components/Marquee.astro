@@ -1,0 +1,53 @@
+---
+const a = ['Diseño web', 'Logotipos', 'Identidad de marca', 'Redes sociales'];
+const b = ['Hostelería', 'Salud y bienestar', 'Belleza y estética', 'Negocios de Cádiz'];
+---
+<section class="marquee" aria-label="Servicios y tipos de negocio">
+  <div class="band band--a">
+    <div class="track" data-marquee data-dir="-1">
+      {[0, 1].map((i) => (
+        <ul class="copy" aria-hidden={i === 1 ? 'true' : undefined}>
+          {a.map((t) => (<li><span class="display">{t}</span><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.600 8.400L23 12l-8.400 2.600L12 23l-2.600-8.400L1 12l8.400-2.600Z"/></svg></li>))}
+        </ul>
+      ))}
+    </div>
+  </div>
+  <div class="band band--b">
+    <div class="track" data-marquee data-dir="1">
+      {[0, 1].map((i) => (
+        <ul class="copy" aria-hidden={i === 1 ? 'true' : undefined}>
+          {b.map((t) => (<li><span class="display">{t}</span><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1l2.600 8.400L23 12l-8.400 2.600L12 23l-2.600-8.400L1 12l8.400-2.600Z"/></svg></li>))}
+        </ul>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    position: relative; z-index: 2; overflow: hidden; padding-block: clamp(2.5rem, 6vw, 5rem);
+    background: linear-gradient(to bottom, var(--noche) 50%, var(--cal) 50%);
+  }
+  .band { position: relative; overflow: hidden; width: 110%; margin-left: -5%; }
+  .band--a {
+    background: var(--accent); color: var(--on-accent); rotate: -2deg;
+    box-shadow: 0 18px 40px rgb(0 0 0 / 0.35); position: relative; z-index: 2;
+  }
+  .band--b {
+    background: var(--noche); color: var(--cal); rotate: 1.6deg; margin-top: -0.4rem;
+    border-block: 1px solid #2c2c30; box-shadow: 0 18px 40px rgb(0 0 0 / 0.25);
+  }
+  .band--b .display { color: transparent; -webkit-text-stroke: 1.5px var(--cal); }
+  .band--b .star { color: var(--accent); }
+  .track { display: flex; width: max-content; will-change: transform; padding-block: 0.9rem; }
+  .copy { display: flex; flex: none; align-items: center; }
+  .copy li { display: flex; align-items: center; }
+  .display { font-size: clamp(1.7rem, 1rem + 3.4vw, 4rem); white-space: nowrap; line-height: 1; padding-inline: 0.5em; }
+  .star { width: clamp(1.2rem, 1rem + 1.4vw, 2.2rem); flex: none; fill: currentColor; }
+  @media (prefers-reduced-motion: reduce) {
+    .band { width: 100%; margin: 0; rotate: 0deg; }
+    .track { width: auto; flex-wrap: wrap; }
+    .copy[aria-hidden] { display: none; }
+    .copy { flex-wrap: wrap; justify-content: center; }
+  }
+</style>

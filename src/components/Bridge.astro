@@ -1,0 +1,36 @@
+---
+import Smoke from './Smoke.astro';
+const split = (t: string) => t.split(' ');
+---
+<section class="bridge section section--dark" id="puente" aria-labelledby="bridge-h" data-bridge>
+  <div class="section__bg" aria-hidden="true">
+    <Smoke uid="bridge" />
+    <span class="halo"></span>
+    <span class="vignette"></span>
+    <span class="grain"></span>
+  </div>
+  <div class="bridge__pin">
+    <h2 class="bridge__big display" id="bridge-h">
+      <span class="bridge__row">{split('¿Sigues ahí?').map((w) => <span class="w">{w}</span>)}</span>
+      <span class="bridge__row bridge__row--sub">{split('Vamos a lo que importa').map((w) => <span class="w">{w}</span>)}</span>
+    </h2>
+    <p class="hand bridge__hand" aria-hidden="true">
+      baja, que te enseño
+      <svg class="arrow" viewBox="0 0 70 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M20 6C8 40 50 64 36 106"/><path data-draw d="M18 92l18 16 14-18"/></svg>
+    </p>
+  </div>
+</section>
+
+<style>
+  .bridge { min-height: 100svh; display: grid; place-items: center; padding-block: var(--space-6); }
+  .bridge__pin { text-align: center; padding-inline: var(--gutter); display: grid; gap: var(--space-4); justify-items: center; }
+  .bridge__big { font-size: clamp(2.6rem, 1rem + 9vw, 9.5rem); line-height: 0.95; }
+  .bridge__row { display: block; }
+  .bridge__row--sub { font-size: 0.5em; font-stretch: 100%; font-weight: 600; letter-spacing: -0.01em; margin-top: 0.3em; color: var(--accent); }
+  .w { display: inline-block; margin-right: 0.22em; }
+  .bridge__hand { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+  .bridge__hand .arrow { width: 3rem; }
+  .halo { position: absolute; left: 50%; top: 50%; width: 70vmin; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%); }
+  .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 35%, rgb(0 0 0 / 0.8)); }
+</style>

@@ -1,0 +1,61 @@
+---
+import Smoke from './Smoke.astro';
+const hitos = [
+  { cuando: 'Ahora', titulo: 'Grado Superior en Marketing y Publicidad', texto: 'Estoy en 2º curso, en Cádiz. [REVISAR] centro y años.' },
+  { cuando: 'Web real', titulo: 'Nernutri', texto: 'Diseño y desarrollo completos de la web de Nerea Fernández, dietista con consulta 100% online. [REVISAR] año.' },
+  { cuando: 'Proyecto de clase', titulo: 'Tarjeta de socio IKEA', texto: 'Landing y panel de administración con Google Apps Script y Google Sheets. Un ejercicio ficticio.' },
+  { cuando: 'Próximamente', titulo: 'Newsletter', texto: 'El tercer proyecto, en preparación.' },
+];
+---
+<section class="tray section section--light" id="trayectoria" aria-labelledby="tray-h">
+  <div class="section__bg" aria-hidden="true"><Smoke tone="light" uid="tray" /><span class="grain"></span></div>
+  <div class="wrap tray__grid">
+    <header class="tray__head">
+      <p class="hand tray__pre">lo que he ido aprendiendo</p>
+      <h2 class="h2 tray__h" id="tray-h" data-lines>
+        <span class="line"><span class="line__in">Formación</span></span>
+        <span class="line"><span class="line__in">y trayectoria.</span></span>
+      </h2>
+      <p class="hand tray__aside" aria-hidden="true">
+        <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M10 12C40 4 82 14 94 46c2 6 3 12 2 18"/><path data-draw d="M82 52l14 14 14-12"/></svg>
+        y lo que ya está publicado
+      </p>
+    </header>
+
+    <div class="tl" data-timeline>
+    <svg class="line-t__rail" viewBox="0 0 4 100" preserveAspectRatio="none" aria-hidden="true"><path data-draw d="M2 0V100" /></svg>
+    <ol class="line-t">
+      {hitos.map((h) => (
+        <li class="hito">
+          <span class="hito__dot" aria-hidden="true"></span>
+          <p class="hito__cuando">{h.cuando}</p>
+          <h3 class="hito__t display">{h.titulo}</h3>
+          <p class="hito__d">{h.texto}</p>
+        </li>
+      ))}
+    </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tray__grid { display: grid; gap: var(--space-5); }
+  .tray__h { font-size: clamp(2.2rem, 1rem + 3.6vw, 4.4rem); }
+  .tray__pre { transform: rotate(-3deg); display: inline-block; margin-bottom: var(--space-1); }
+  .tl { position: relative; }
+  .tray__aside { display: flex; align-items: flex-end; gap: 0.5rem; margin-top: var(--space-3); transform: rotate(-2deg); }
+  .tray__aside .arrow { width: 4rem; transform: scaleX(-1) rotate(-10deg); }
+  .line-t { display: grid; gap: var(--space-4); padding: 0 0 0 2.2rem; margin: 0; }
+  .line-t__rail { position: absolute; left: 0.45rem; top: 0.6rem; bottom: 0.6rem; width: 4px; height: calc(100% - 1.2rem); }
+  .line-t__rail path { stroke: var(--tinta); stroke-width: 2; fill: none; vector-effect: non-scaling-stroke; }
+  .hito { position: relative; padding: var(--space-3); border-radius: 1.25rem; background: rgb(255 255 255 / 0.55); backdrop-filter: blur(6px);
+    box-shadow: 0 1px 0 #fff inset, 0 20px 40px -24px rgb(0 0 0 / 0.35); }
+  .hito__dot { position: absolute; left: -2.2rem; top: 1.5rem; width: 1.1rem; aspect-ratio: 1; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--cal), 0 0 0 5.5px var(--tinta); }
+  .hito__cuando { display: inline-block; padding: 0.2rem 0.7rem; border-radius: var(--radius); background: var(--tinta); color: var(--cal); font-size: var(--step--1); font-weight: 600; }
+  .hito__t { font-size: clamp(1.3rem, 1rem + 1.2vw, 2rem); margin: 0.6rem 0 0.4rem; line-height: 1.02; }
+  .hito__d { max-width: 34rem; }
+  @media (min-width: 52rem) {
+    .tray__grid { grid-template-columns: 1fr 1fr; gap: var(--space-5); align-items: start; }
+    .tray__head { position: sticky; top: 7rem; }
+  }
+</style>
