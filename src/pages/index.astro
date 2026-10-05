@@ -14,6 +14,15 @@ import Footer from '../components/Footer.astro';
   title="Carlos Fernández | Diseño web, logotipos y redes sociales en Cádiz y alrededores"
   description="Soy Carlos, estudiante de Marketing y Publicidad en Cádiz. Diseño webs, logotipos e identidad y gestiono redes sociales para negocios de Cádiz y alrededores."
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Carlos Fernández',
+    url: 'https://caarlosfdz.github.io/',
+    description: 'Diseño web, logotipos e identidad y redes sociales para negocios de Cádiz y alrededores.',
+    knowsAbout: ['Diseño web', 'Logotipos e identidad', 'Redes sociales'],
+    homeLocation: { '@type': 'Place', name: 'Cádiz, España' },
+  })} />
   <main id="contenido">
     <Hero />
     <Marquee />

@@ -17,13 +17,14 @@ import { enlacePrincipal } from '../config/contacto';
 <style>
   .nav {
     position: fixed; inset: 0 0 auto 0; z-index: 50;
-    background: rgb(11 11 12 / 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    background: rgb(11 11 12 / 0.9);
     transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s, backdrop-filter 0.3s;
     display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
     padding: 1rem var(--gutter);
   }
   :global(.nav--top) { background: transparent !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
   :global(.nav--hidden) { transform: translateY(-110%); }
+  :global(.nav--hidden:focus-within) { transform: none; } /* con el teclado dentro del menú, siempre visible */
   .nav__logo {
     font-family: var(--font-display); font-stretch: 112%; font-weight: 800;
     text-decoration: none; font-size: var(--step-0); letter-spacing: -0.01em;

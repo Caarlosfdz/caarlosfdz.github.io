@@ -26,7 +26,14 @@ function smoothScroll() {
     const m = href.match(/^\/?#(.+)$/);
     if (!m || (href.startsWith('/#') && location.pathname !== '/')) return;
     const target = document.getElementById(m[1]);
-    if (target) { e.preventDefault(); l.scrollTo(target, { offset: 0 }); }
+    if (target) {
+      e.preventDefault();
+      l.scrollTo(target, { offset: 0 });
+      // El foco también se mueve a la sección (enlace "Saltar al contenido", teclado y lectores de pantalla).
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      history.replaceState(null, '', href.startsWith('/') ? href.slice(1) : href);
+    }
   }, true);
 }
 
@@ -72,15 +79,16 @@ function hero(delay = 0) {
     tl.from('.hero .line__in', { yPercent: 110, duration: 1.1, stagger: 0.12 })
       .from('.hero__halo', { opacity: 0, duration: 1.6 }, 0.1)
       .from('.hero__circle', { scale: 0, transformOrigin: '50% 60%', duration: 1.2, ease: 'expo.out' }, 0.1)
-      .from('.hero__portrait img', { yPercent: 8, opacity: 0, duration: 1.1 }, 0.25)
+      .from('.hero__portrait img', { yPercent: 8, duration: 1.1 }, 0.25) // sin opacity: el retrato (LCP) cuenta en cuanto se pinta
       .from('.hero__rim', { opacity: 0, duration: 1.2 }, 0.9)
       .from('.hero__word', { opacity: 0, yPercent: 12, duration: 1.3 }, 0.2)
       .from('.pill__in', { scale: 0.6, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'back.out(1.7)' }, 0.7)
       .from('.hero__foot > *, .hero__note, .meta', { y: 24, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.8);
 
-    $$('.pill').forEach((p, i) => {
-      gsap.to(p, { y: i % 2 ? 10 : -10, duration: 2.4 + i * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3 });
-    });
+    const floats = $$('.pill').map((p, i) =>
+      gsap.to(p, { y: i % 2 ? 10 : -10, duration: 2.4 + i * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.3 }),
+    );
+    ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top', onToggle: (self) => floats.forEach((f) => f.paused(!self.isActive)) });
 
     gsap.to('.hero__word', {
       y: () => window.innerHeight * 0.18, ease: 'none',
@@ -161,8 +169,9 @@ function marquee() {
   });
   ScrollTrigger.create({
     trigger: '.marquee', start: 'top bottom', end: 'bottom top',
+    onToggle: (self) => tweens.forEach((t) => t.paused(!self.isActive)),
     onUpdate: (self) => {
-      const boost = 1 + Math.min(Math.abs(self.getVelocity()) / 260, 6);
+      const boost = 1 + Math.min(Math.abs(self.getVelocity()) / 400, 2.5);
       tweens.forEach((t) => { gsap.killTweensOf(t, 'timeScale'); t.timeScale(boost); gsap.to(t, { timeScale: 1, duration: 0.9, ease: 'power2.out', overwrite: 'auto' }); });
     },
   });
@@ -220,8 +229,8 @@ function projects() {
       const card = el.closest('.card') as HTMLElement;
       const move = (e: PointerEvent) => {
         const r = card.getBoundingClientRect();
-        ry(((e.clientX - r.left) / r.width - 0.5) * 12);
-        rx(-((e.clientY - r.top) / r.height - 0.5) * 9);
+        ry(((e.clientX - r.left) / r.width - 0.5) * 7);
+        rx(-((e.clientY - r.top) / r.height - 0.5) * 5);
       };
       const leave = () => { rx(0); ry(0); };
       card.addEventListener('pointermove', move); card.addEventListener('pointerleave', leave);
@@ -297,7 +306,7 @@ function projectPage() {
     if (mock) {
       const rx = gsap.quickTo(mock, 'rotationX', { duration: 0.8, ease: 'power3.out' });
       const ry = gsap.quickTo(mock, 'rotationY', { duration: 0.8, ease: 'power3.out' });
-      const move = (e: PointerEvent) => { ry((e.clientX / innerWidth - 0.5) * 10); rx(-(e.clientY / innerHeight - 0.5) * 7); };
+      const move = (e: PointerEvent) => { ry((e.clientX / innerWidth - 0.5) * 6); rx(-(e.clientY / innerHeight - 0.5) * 4); };
       window.addEventListener('pointermove', move);
       off.push(() => window.removeEventListener('pointermove', move));
     }
@@ -316,38 +325,55 @@ function projectPage() {
   });
 }
 
+/* ---------- Humo: se anima solo mientras se ve ---------- */
+let smokeIO: IntersectionObserver | null = null;
+function smokeVisibility() {
+  if (!('IntersectionObserver' in window)) return;
+  smokeIO = new IntersectionObserver((entries) => entries.forEach((e) => e.target.toggleAttribute('data-off', !e.isIntersecting)), { rootMargin: '100px' });
+  $$('.smoke').forEach((el) => smokeIO?.observe(el));
+}
+
 /* ---------- Ciclo de vida con View Transitions ---------- */
 let ctx: gsap.Context | null = null;
 let lastBody: HTMLElement | null = null;
 
+let bootToken = 0;
+let firstBoot = true;
+const idle = (fn: () => void) =>
+  'requestIdleCallback' in window ? (window as any).requestIdleCallback(fn, { timeout: 500 }) : setTimeout(fn, 50);
+
 function boot() {
   document.documentElement.classList.add('js');
   if (reduce) { document.documentElement.classList.remove('intro-on'); return; }
-  const delay = document.documentElement.classList.contains('intro-on') && document.querySelector('.hero') ? 1.25 : 0;
-  ctx = gsap.context(() => {
-    nav();
-    intro();
-    hero(delay);
-    magnetic();
-    reveals();
-    marquee();
-    bridge();
-    projects();
-    lines();
-    about();
-    projectPage();
-  });
-  // Tras una navegación: primero se recalcula el layout (secciones fijadas) y luego se va arriba o a la ancla.
-  ScrollTrigger.refresh();
-  const go = () => {
-    const hash = location.hash && document.getElementById(location.hash.slice(1));
-    lenis?.resize(); // el límite de scroll de Lenis se recalcula con el nuevo contenido
-    lenis?.scrollTo(hash || 0, { immediate: true, force: true });
+  const token = ++bootToken;
+  const esNavegacion = !firstBoot;
+  firstBoot = false;
+  const delay = document.documentElement.classList.contains('intro-on') && document.querySelector('.hero') ? 0.95 : 0;
+  ctx = gsap.context(() => {});
+  // Lo que se ve al cargar, enseguida; el resto, troceado en tareas cortas para no bloquear el hilo principal.
+  ctx.add(() => { nav(); intro(); hero(delay); projectPage(); });
+  const resto = [magnetic, reveals, marquee, bridge, projects, lines, about, smokeVisibility];
+  const terminar = () => {
+    ScrollTrigger.refresh();
+    const ir = () => {
+      const hash = location.hash && document.getElementById(location.hash.slice(1));
+      lenis?.resize(); // el límite de scroll de Lenis se recalcula con el nuevo contenido
+      lenis?.scrollTo(hash || 0, { immediate: true, force: true });
+    };
+    // En la primera carga se respeta el scroll que restaure el navegador; tras navegar, arriba o a la ancla.
+    if (esNavegacion || location.hash) { ir(); requestAnimationFrame(() => { ScrollTrigger.refresh(); ir(); }); }
   };
-  go();
-  requestAnimationFrame(() => { ScrollTrigger.refresh(); go(); });
+  const paso = (i: number) => {
+    if (token !== bootToken || !ctx) return;
+    if (i === resto.length) { terminar(); return; }
+    ctx.add(resto[i]);
+    idle(() => paso(i + 1));
+  };
+  idle(() => paso(0));
 }
 function teardown() {
+  bootToken++;
+  smokeIO?.disconnect(); smokeIO = null;
   mms.splice(0).forEach((m) => m.revert());
   ctx?.revert(); ctx = null;
   ScrollTrigger.getAll().forEach((t) => t.kill());

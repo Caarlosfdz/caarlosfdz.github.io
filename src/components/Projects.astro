@@ -45,7 +45,7 @@ const host = (u: string) => { try { return new URL(u).hostname; } catch { return
                   {d.papel && (<div><dt>Mi papel</dt><dd>{d.papel}</dd></div>)}
                   {d.url && (<div><dt>En vivo</dt><dd>{host(d.url) || 'Ver enlace'}</dd></div>)}
                 </dl>
-                <a class="btn card__btn" href={href} data-magnetic>{proximo ? 'Ver la página' : 'Ver proyecto'}</a>
+                <a class="btn card__btn" href={href} data-magnetic tabindex="-1" aria-hidden="true">{proximo ? 'Ver la página' : 'Ver proyecto'}</a>
               </div>
 
               <div class="mocks" data-tilt aria-hidden={img ? undefined : 'true'}>
@@ -97,8 +97,7 @@ const host = (u: string) => { try { return new URL(u).hostname; } catch { return
       radial-gradient(ellipse 40% 30% at 50% -8%, rgb(255 255 255 / 0.28), transparent 70%); }
   .card::before { content: ''; position: absolute; z-index: -1; left: 50%; top: 0; width: 38%; height: 3px; translate: -50% 0; background: rgb(255 255 255 / 0.85); box-shadow: 0 0 40px 10px rgb(255 255 255 / 0.35); border-radius: 3px; }
   .card__veil { position: absolute; inset: 0; z-index: 5; background: #000; opacity: 0; pointer-events: none; }
-  .card::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0.16; mix-blend-mode: soft-light;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .card::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0.5; background: url('/grain-light.png') 0 0 / 128px 128px; }
 
   .card__copy { display: grid; gap: var(--space-2); align-content: center; justify-items: start; }
   .tag { display: inline-block; padding: 0.3rem 0.8rem; border-radius: var(--radius); font-size: var(--step--1); font-weight: 600;
@@ -107,6 +106,8 @@ const host = (u: string) => { try { return new URL(u).hostname; } catch { return
   .card__title { font-size: clamp(2rem, 1.2rem + 4.4vw, 5rem); overflow-wrap: break-word; }
   .card--next .card__title { font-size: clamp(1.7rem, 1rem + 3vw, 3.4rem); }
   .card__link { text-decoration: none; }
+  .card:has(.card__link:focus-visible) { outline: 3px solid var(--accent); outline-offset: 4px; }
+  .card__link:focus-visible { outline: none; }
   .card__link::after { content: ''; position: absolute; inset: 0; z-index: 4; }
   .card__sum { max-width: 28rem; color: rgb(236 233 228 / 0.82); }
   .card__aviso { max-width: 28rem; font-size: var(--step--1); padding-left: 0.8rem; border-left: 2px solid var(--accent); color: var(--cal); }

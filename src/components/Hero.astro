@@ -36,8 +36,8 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
       <Image
         src={retrato}
         alt="Retrato de Carlos Fernández en blanco y negro"
-        widths={[480, 720, 960, 1200]}
-        sizes="(min-width: 52rem) 46vw, 100vw"
+        widths={[360, 540, 720, 960]}
+        sizes="(min-width: 52rem) 46vw, min(100vw, 460px)"
         format="webp"
         loading="eager"
         fetchpriority="high"
@@ -104,10 +104,6 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
       radial-gradient(ellipse 75% 65% at 50% 55%, transparent 40%, rgb(0 0 0 / 0.78) 100%),
       radial-gradient(ellipse 60% 40% at 50% 100%, rgb(0 0 0 / 0.5), transparent);
   }
-  .grain {
-    position: absolute; inset: 0; opacity: 0.2; mix-blend-mode: soft-light; pointer-events: none;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
   /* Fundido a negro abajo en vez de corte */
   .hero::after {
     content: ''; position: absolute; inset: auto 0 0 0; height: 24%; z-index: 3; pointer-events: none;
@@ -171,8 +167,7 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
     content: ''; position: absolute; inset: 0;
     background:
       linear-gradient(to top, rgb(0 0 0 / 0.5), transparent 55%),
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    mix-blend-mode: multiply; opacity: 0.45;
+      url('/grain-dark.png') 0 0 / 128px 128px;
   }
   .hero__rim { /* luz lima rebotando en los hombros, con la silueta como máscara */
     position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: 0.55;
