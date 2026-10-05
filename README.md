@@ -1,6 +1,6 @@
 # caarlosfdz.github.io
 
-Portfolio de Carlos Fernández: diseño web, logotipos e identidad y redes sociales para negocios de Cádiz.
+Portfolio de Carlos Fernández: diseño web, logotipos e identidad y redes sociales para negocios de Cádiz y alrededores.
 
 Astro (estático) + CSS propio + GSAP/ScrollTrigger + Lenis. Se publicará en https://caarlosfdz.github.io.
 

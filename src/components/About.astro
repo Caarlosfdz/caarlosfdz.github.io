@@ -11,8 +11,8 @@ import Smoke from './Smoke.astro';
       <h2 class="h2" id="about-h" data-lines>
         <span class="line"><span class="line__in">Sobre mí.</span></span>
       </h2>
-      <p class="about__lead">Soy Carlos, estudio 2º de Grado Superior de <span class="hl">Marketing y Publicidad</span> en Cádiz y quiero que los negocios de aquí se vean en internet tan bien como se ven en la calle.</p>
-      <p>Diseño <span class="hl">webs</span>, <span class="hl">logotipos e identidad</span> y llevo <span class="hl">redes sociales</span>. Trabajo con negocios locales de la provincia: hostelería, salud y bienestar, belleza y estética.</p>
+      <p class="about__lead">Soy Carlos, estudio 2º de Grado Superior de <span class="hl">Marketing y Publicidad</span> en Cádiz y quiero que los negocios de mi zona se vean en internet tan bien como se ven en la calle.</p>
+      <p>Diseño <span class="hl">webs</span>, <span class="hl">logotipos e identidad</span> y llevo <span class="hl">redes sociales</span>. Trabajo con negocios de Cádiz y alrededores: hostelería, salud y bienestar, belleza y estética.</p>
       <p>Mi objetivo es sencillo: que cuando alguien vea tu negocio en internet, <span class="hl">te escriba</span>.</p>
       <p class="about__note hand" aria-hidden="true">
         <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M10 12C40 4 82 14 94 46c2 6 3 12 2 18"/><path data-draw d="M82 52l14 14 14-12"/></svg>
@@ -28,7 +28,7 @@ import Smoke from './Smoke.astro';
       <svg class="badge" viewBox="0 0 160 160" aria-hidden="true">
         <circle cx="80" cy="80" r="78" fill="#ece9e4" stroke="#141414" stroke-width="1.5"/>
         <defs><path id="circ" d="M80 80m-60 0a60 60 0 1 1 120 0a60 60 0 1 1-120 0"/></defs>
-        <text><textPath href="#circ" startOffset="0">diseño web • logotipos • redes sociales • Cádiz •</textPath></text>
+        <text><textPath href="#circ" startOffset="0">diseño web • logotipos • redes • Cádiz y alrededores •</textPath></text>
       </svg>
     </figure>
   </div>
@@ -52,7 +52,7 @@ import Smoke from './Smoke.astro';
     filter: contrast(1.12); }
   .arch__glow { position: absolute; inset: auto -20% -30% -20%; height: 70%; background: radial-gradient(closest-side, rgb(255 255 255 / 0.5), transparent); mix-blend-mode: soft-light; }
   .badge { position: absolute; right: -2.2rem; bottom: 3rem; width: 8.5rem; height: 8.5rem; animation: spin 24s linear infinite; }
-  .badge text { font: 800 13px var(--font-display); font-stretch: 112%; fill: var(--tinta); letter-spacing: 0.05em; }
+  .badge text { font: 800 11px var(--font-display); font-stretch: 105%; fill: var(--tinta); letter-spacing: 0.03em; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   @media (min-width: 52rem) {
