@@ -178,7 +178,7 @@ const pasos = [
     background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 38%, transparent), transparent 70%); }
   .ph__num { position: absolute; z-index: -1; left: -0.05em; top: 0.1em; font-size: clamp(14rem, 8rem + 32vw, 42rem); line-height: 0.8; letter-spacing: -0.06em; user-select: none;
     color: transparent; -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.3); background: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.01) 75%);
-    -webkit-background-clip: text; background-clip: text; will-change: transform; }
+    -webkit-background-clip: text; background-clip: text; }
   .ph__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); align-items: center; }
   .ph__title.ph__title--next { font-size: clamp(2rem, 1rem + 3.4vw, 4.6rem); }
   .ph__copy { display: grid; gap: var(--space-2); justify-items: start; }
@@ -189,7 +189,7 @@ const pasos = [
   .ph__sum { max-width: 30rem; font-size: var(--step-1); line-height: 1.35; color: rgb(236 233 228 / 0.88); }
   .aviso { max-width: 30rem; padding: 0.7rem 1rem; border-radius: 0.8rem; background: rgb(198 241 53 / 0.1); box-shadow: inset 3px 0 0 var(--accent); font-size: var(--step--1); }
   .ph__btns { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
-  .ph__mock { position: relative; perspective: 1400px; transform-style: preserve-3d; }
+  .ph__mock { position: relative; }
   .ph__mock :global(.ph__main) { margin-inline: auto; }
   .ph__phone { position: absolute; z-index: 3; right: 2%; bottom: -8%; width: 20%; margin: 0; border-radius: 1.4rem; overflow: hidden; border: 5px solid #0a0a0b;
     box-shadow: 0 30px 60px -10px rgb(0 0 0 / 0.8), 0 0 0 1.5px #3a3a40; background: #fff; }
@@ -261,7 +261,7 @@ const pasos = [
   .next__link { position: relative; isolation: isolate; overflow: hidden; display: block; text-decoration: none; padding-block: clamp(5rem, 11vw, 9rem); }
   .next__fill { position: absolute; inset: 0; z-index: -1; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
   .next__num { position: absolute; z-index: -1; right: -0.04em; top: 50%; translate: 0 -50%; font-size: clamp(12rem, 6rem + 26vw, 34rem); line-height: 0.8; letter-spacing: -0.06em;
-    color: transparent; -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.3); transition: -webkit-text-stroke-color 0.4s; }
+    color: transparent; -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.3); }
   .next__in { display: grid; gap: 0.6rem; transition: color 0.4s; }
   .next__k { font-family: var(--font-hand); font-size: 1.8rem; color: var(--accent); transition: color 0.4s; }
   .next__t { font-size: clamp(1.6rem, 0.6rem + 6vw, 8rem); overflow-wrap: break-word; }

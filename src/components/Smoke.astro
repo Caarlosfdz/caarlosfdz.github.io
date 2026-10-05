@@ -5,11 +5,11 @@ import a from '../assets/smoke/ribbon-a-dark.webp';
 import b from '../assets/smoke/ribbon-b-dark.webp';
 import aL from '../assets/smoke/ribbon-a-light.webp';
 import bL from '../assets/smoke/ribbon-b-light.webp';
-interface Props { tone?: 'dark' | 'light'; uid?: string; }
-const { tone = 'dark' } = Astro.props;
+interface Props { tone?: 'dark' | 'light'; uid?: string; still?: boolean; }
+const { tone = 'dark', still = false } = Astro.props;
 const [ra, rb] = tone === 'light' ? [aL, bL] : [a, b];
 ---
-<div class="smoke" aria-hidden="true">
+<div class:list={['smoke', { 'smoke--still': still }]} aria-hidden="true">
   <img class="ribbon ribbon--a" src={ra.src} width={ra.width} height={ra.height} alt="" decoding="async" loading="lazy" />
   <img class="ribbon ribbon--b" src={rb.src} width={rb.width} height={rb.height} alt="" decoding="async" loading="lazy" />
   <span class="lime"></span>
@@ -17,6 +17,8 @@ const [ra, rb] = tone === 'light' ? [aL, bL] : [a, b];
 
 <style>
   .smoke { position: absolute; inset: 0; overflow: hidden; }
+  /* Sin deriva en secciones muy largas y cargadas (proyectos): el humo queda quieto y no cuesta nada al hacer scroll */
+  .smoke--still .ribbon, .smoke--still .lime { animation: none; }
   .ribbon { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .smoke[data-off] .ribbon, .smoke[data-off] .lime { animation-play-state: paused; }
   .ribbon--a { animation: sway-a 24s ease-in-out infinite alternate; }

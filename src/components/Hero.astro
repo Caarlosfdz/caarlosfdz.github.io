@@ -1,11 +1,10 @@
 ---
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import retrato from '../assets/carlos-recorte.png';
+import rim from '../assets/carlos-rim.png';
 import Smoke from './Smoke.astro';
 import { enlacePrincipal } from '../config/contacto';
 
-// El reflejo lima de los hombros usa la silueta del retrato como máscara.
-const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
 ---
 <section class="hero" id="inicio" aria-labelledby="hero-titulo">
   <div class="hero__bg" aria-hidden="true">
@@ -30,23 +29,25 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
   <div class="hero__stage">
     <div class="hero__word display" aria-hidden="true" data-depth="-1">PORTFOLIO</div>
 
-    <div class="hero__portrait" style={`--silueta: url(${silueta.src})`}>
+    <div class="hero__portrait">
       <span class="hero__halo" aria-hidden="true"></span>
       <span class="hero__circle" aria-hidden="true" data-depth="0.6"></span>
-      <Image
-        src={retrato}
-        alt="Retrato de Carlos Fernández en blanco y negro"
-        widths={[360, 540, 720, 960]}
-        sizes="(min-width: 52rem) 46vw, min(100vw, 460px)"
-        format="webp"
-        loading="eager"
-        fetchpriority="high"
-        data-depth="1"
-      />
-      <span class="hero__rim" aria-hidden="true"></span>
+      <div class="hero__figure" data-depth="1">
+        <Image
+          src={retrato}
+          alt="Retrato de Carlos Fernández en blanco y negro"
+          widths={[360, 540, 720, 960]}
+          sizes="(min-width: 52rem) 46vw, min(100vw, 460px)"
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <!-- Reflejo lima en los hombros: capa ya pintada, sin máscaras ni mezclas en vivo -->
+        <Image class="hero__rim" src={rim} alt="" widths={[360, 540, 720]} sizes="(min-width: 52rem) 46vw, min(100vw, 460px)" format="webp" loading="eager" aria-hidden="true" />
+      </div>
     </div>
 
-    <ul class="pills" aria-label="Servicios">
+  <ul class="pills" aria-label="Servicios">
       <li class="pill pill--1">
         <span class="pill__in" data-pill>
           <span class="pill__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.500" width="18" height="15" rx="2.500"/><path d="M3 9.500h18"/><circle cx="6.500" cy="7" r=".4"/></svg></span>
@@ -144,12 +145,9 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
     position: absolute; z-index: 2; bottom: 0; left: 0; right: 0; margin-inline: auto;
     width: var(--pw); isolation: isolate;
   }
-  .hero__portrait img {
-    position: relative; width: 100%; height: auto;
-    filter: contrast(1.14) brightness(1.03);
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
-  }
+  .hero__figure { position: relative; }
+  .hero__figure :global(img) { display: block; width: 100%; height: auto; }
+  .hero__figure :global(.hero__rim) { position: absolute; inset: 0; pointer-events: none; }
   .hero__halo {
     position: absolute; z-index: -3; left: 50%; bottom: -10%; width: 160%; aspect-ratio: 1;
     margin-left: -80%; border-radius: 50%; opacity: 0.5;
@@ -161,22 +159,12 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
     background:
       radial-gradient(circle at 50% 24%, var(--accent-hi) 0%, var(--accent) 34%, var(--accent-lo) 100%);
     box-shadow: 0 0 80px 8px color-mix(in srgb, var(--accent) 35%, transparent);
-    will-change: transform;
   }
-  .hero__circle::after { /* grano y sombra inferior */
-    content: ''; position: absolute; inset: 0;
-    background:
-      linear-gradient(to top, rgb(0 0 0 / 0.5), transparent 55%),
-      url('/grain-dark.png') 0 0 / 128px 128px;
+  .hero__circle::before { /* grano horneado, más suave que el sombreado */
+    content: ''; position: absolute; inset: 0; background: url('/grain-dark.png') 0 0 / 128px 128px; opacity: 0.4;
   }
-  .hero__rim { /* luz lima rebotando en los hombros, con la silueta como máscara */
-    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: 0.55;
-    -webkit-mask-image: var(--silueta); mask-image: var(--silueta);
-    -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
-    background:
-      radial-gradient(ellipse 34% 30% at 3% 84%, var(--accent), transparent 70%),
-      radial-gradient(ellipse 34% 30% at 97% 84%, var(--accent), transparent 70%),
-      radial-gradient(ellipse 40% 12% at 50% 100%, var(--accent), transparent 70%);
+  .hero__circle::after { /* sombra inferior */
+    content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent 55%);
   }
 
   /* ---------- Pastillas ---------- */
@@ -238,11 +226,9 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
     @media (max-height: 800px) { .meta { display: none; } }
     .meta--lugar { left: var(--gutter); top: 61%; }
     .meta--libre { right: var(--gutter); top: 61%; }
-    .dot {
-      width: 0.7rem; height: 0.7rem; flex: none; margin-top: 0.4rem; border-radius: 50%;
-      background: var(--accent); box-shadow: 0 0 0 0 var(--accent); animation: ping 2.4s ease-out infinite;
-    }
-    @keyframes ping { 70%, 100% { box-shadow: 0 0 0 0.7rem transparent; } }
+    .dot { position: relative; width: 0.7rem; height: 0.7rem; flex: none; margin-top: 0.4rem; border-radius: 50%; background: var(--accent); }
+    .dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); animation: ping 2.4s ease-out infinite; }
+    @keyframes ping { 0% { transform: scale(1); opacity: 0.55; } 70%, 100% { transform: scale(3.2); opacity: 0; } }
 
     .hero__note {
       display: block; position: absolute; z-index: 6; right: var(--gutter); bottom: 2.75rem;
@@ -256,10 +242,7 @@ const silueta = await getImage({ src: retrato, width: 720, format: 'webp' });
       font-size: 0.78rem; letter-spacing: 0.04em; color: rgb(236 233 228 / 0.75);
     }
     .scroll i { width: 1px; height: 2.2rem; background: rgb(236 233 228 / 0.25); overflow: hidden; position: relative; }
-    .scroll i::after {
-      content: ''; position: absolute; inset: 0; background: var(--accent);
-      transform-origin: top; animation: drip 2.2s ease-in-out infinite;
-    }
-    @keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+    .scroll i::after { content: ''; position: absolute; inset: 0; background: var(--accent); animation: drip 2.2s ease-in-out infinite; }
+    @keyframes drip { 0% { transform: translateY(-100%); } 60%, 100% { transform: translateY(100%); } }
   }
 </style>
