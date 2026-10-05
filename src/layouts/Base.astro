@@ -3,6 +3,9 @@ import '@fontsource-variable/archivo/wdth.css';
 import '@fontsource-variable/instrument-sans/index.css';
 import '@fontsource/caveat/500.css';
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Intro from '../components/Intro.astro';
+import Nav from '../components/Nav.astro';
 
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
@@ -24,6 +27,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
+    <ClientRouter />
     <script is:inline>
       document.documentElement.classList.add('js');
       try {
@@ -37,6 +41,24 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip" href="#contenido">Saltar al contenido</a>
+    <Intro />
+    <Nav />
     <slot />
+    <div class="cursor" aria-hidden="true"><span></span></div>
+    <script>
+      import '../scripts/motion';
+    </script>
   </body>
 </html>
+
+<style is:global>
+  .cursor { display: none; }
+  @media (hover: hover) and (pointer: fine) and (min-width: 52rem) {
+    .cursor {
+      display: grid; place-items: center; position: fixed; z-index: 150; left: 0; top: 0; width: 6.5rem; aspect-ratio: 1;
+      margin: -3.25rem 0 0 -3.25rem; border-radius: 50%; background: var(--accent); color: var(--on-accent); pointer-events: none;
+      font-family: var(--font-display); font-stretch: 112%; font-weight: 800; font-size: 0.85rem; text-align: center; line-height: 1.1;
+      transform: scale(0); will-change: transform;
+    }
+  }
+</style>

@@ -7,25 +7,33 @@ gsap.registerPlugin(ScrollTrigger);
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $$ = <T extends Element = HTMLElement>(s: string) => gsap.utils.toArray<T>(s);
 
+// Con View Transitions las animaciones se montan y se desmontan en cada página.
+const mms: gsap.MatchMedia[] = [];
+const newMM = () => { const m = gsap.matchMedia(); mms.push(m); return m; };
+let lenis: Lenis | null = null;
+
 /* ---------- Scroll suave sincronizado con ScrollTrigger (el usuario manda) ---------- */
 function smoothScroll() {
-  const lenis = new Lenis({ lerp: 0.1 });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((t) => lenis.raf(t * 1000));
+  const l = new Lenis({ lerp: 0.1 });
+  lenis = l;
+  l.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((t) => l.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
-  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => {
-    a.addEventListener('click', (e) => {
-      const id = a.getAttribute('href');
-      const target = id && id.length > 1 ? document.querySelector<HTMLElement>(id) : null;
-      if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: 0 }); }
-    });
-  });
+  // Anclas (#id o /#id estando en la home): llegan suaves con Lenis.
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element).closest?.('a');
+    const href = a?.getAttribute('href') ?? '';
+    const m = href.match(/^\/?#(.+)$/);
+    if (!m || (href.startsWith('/#') && location.pathname !== '/')) return;
+    const target = document.getElementById(m[1]);
+    if (target) { e.preventDefault(); l.scrollTo(target, { offset: 0 }); }
+  }, true);
 }
 
 /* ---------- Intro (solo primera visita, ~1,3 s) ---------- */
 function intro(): Promise<void> {
   const root = document.documentElement;
-  if (!root.classList.contains('intro-on')) return Promise.resolve();
+  if (!root.classList.contains('intro-on') || !document.querySelector('.intro')) { root.classList.remove('intro-on'); return Promise.resolve(); }
   return new Promise((resolve) => {
     const tl = gsap.timeline({
       onComplete: () => { root.classList.remove('intro-on'); resolve(); },
@@ -55,8 +63,9 @@ function nav() {
 
 /* ---------- Hero ---------- */
 function hero(delay = 0) {
+  if (!document.querySelector('.hero')) return;
   const q = (s: string) => document.querySelector<HTMLElement>(s);
-  const mm = gsap.matchMedia();
+  const mm = newMM();
 
   mm.add('(min-width: 0px)', () => {
     const tl = gsap.timeline({ delay, defaults: { ease: 'power4.out' } });
@@ -103,7 +112,7 @@ function hero(delay = 0) {
 
 /* ---------- Botones magnéticos (escritorio con ratón) ---------- */
 function magnetic() {
-  const mm = gsap.matchMedia();
+  const mm = newMM();
   mm.add('(min-width: 52rem) and (hover: hover) and (pointer: fine)', () => {
     const off: Array<() => void> = [];
     $$('[data-magnetic]').forEach((el) => {
@@ -142,6 +151,7 @@ function reveals() {
 
 /* ---------- Marquee: acelera con el scroll, se pausa con el ratón ---------- */
 function marquee() {
+  if (!document.querySelector('.marquee')) return;
   const tweens = $$('[data-marquee]').map((track) => {
     const dir = Number(track.dataset.dir) || -1;
     const tw = gsap.fromTo(track, { xPercent: dir === -1 ? 0 : -50 }, { xPercent: dir === -1 ? -50 : 0, duration: 34, ease: 'none', repeat: -1 });
@@ -160,7 +170,8 @@ function marquee() {
 
 /* ---------- Sección puente: fijada en escritorio, palabra a palabra ---------- */
 function bridge() {
-  const mm = gsap.matchMedia();
+  if (!document.querySelector('[data-bridge]')) return;
+  const mm = newMM();
   mm.add('(min-width: 52rem)', () => {
     gsap.set('.bridge .w', { opacity: 0.12 });
     gsap.timeline({
@@ -178,7 +189,7 @@ function bridge() {
 
 /* ---------- Proyectos: apilado, número con parallax, inclinación 3D y cursor ---------- */
 function projects() {
-  const mm = gsap.matchMedia();
+  const mm = newMM();
   mm.add('(min-width: 52rem)', () => {
     const cards = $$('[data-card]');
     cards.forEach((wrap, i) => {
@@ -203,7 +214,7 @@ function projects() {
   mm.add('(min-width: 52rem) and (hover: hover) and (pointer: fine)', () => {
     const off: Array<() => void> = [];
     // Inclinación 3D de los mockups con el ratón
-    $$('[data-tilt]').forEach((el) => {
+    $$('.card [data-tilt]').forEach((el) => {
       const rx = gsap.quickTo(el, 'rotationX', { duration: 0.8, ease: 'power3.out' });
       const ry = gsap.quickTo(el, 'rotationY', { duration: 0.8, ease: 'power3.out' });
       const card = el.closest('.card') as HTMLElement;
@@ -225,7 +236,7 @@ function projects() {
       const move = (e: PointerEvent) => { cx(e.clientX); cy(e.clientY); };
       window.addEventListener('pointermove', move);
       off.push(() => window.removeEventListener('pointermove', move));
-      $$('[data-cursor]').forEach((a) => {
+      $$('.card [data-cursor]').forEach((a) => {
         const card = a.closest('.card') as HTMLElement;
         const enter = () => { label.textContent = a.dataset.cursor ?? ''; gsap.to(label, { scale: 1, duration: 0.3, ease: 'back.out(2)' }); };
         const out = () => gsap.to(label, { scale: 0, duration: 0.25 });
@@ -255,24 +266,101 @@ function lines() {
 
 /* ---------- Sobre mí: el retrato se mueve un poco al hacer scroll ---------- */
 function about() {
+  if (!document.querySelector('.about')) return;
   gsap.to('.arch img', { yPercent: -5, ease: 'none', scrollTrigger: { trigger: '.about', start: 'top bottom', end: 'bottom top', scrub: true } });
   gsap.from('.arch', { yPercent: 6, opacity: 0, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.arch', start: 'top 85%', once: true } });
 }
 
-/* Sin movimiento si el usuario lo pide: todo el contenido ya está visible en el HTML. */
-if (!reduce) {
-  smoothScroll();
-  nav();
-  const delay = document.documentElement.classList.contains('intro-on') ? 1.25 : 0;
-  intro();
-  hero(delay);
-  magnetic();
-  reveals();
-  marquee();
-  bridge();
-  projects();
-  lines();
-  about();
-} else {
-  document.documentElement.classList.remove('intro-on');
+/* ---------- Página de proyecto ---------- */
+function projectPage() {
+  if (!document.querySelector('[data-ph]')) return;
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl.from('.ph__title', { yPercent: 30, opacity: 0, duration: 1 })
+    .from('.ph__num', { opacity: 0, scale: 0.92, duration: 1.4, transformOrigin: '0% 30%' }, 0)
+    .from('.ph__copy > *:not(.ph__title)', { y: 24, opacity: 0, duration: 0.8, stagger: 0.08 }, 0.2)
+    .from('.ph__main, .ph .ghost', { y: 60, opacity: 0, duration: 1.2 }, 0.2)
+    .from('.ph__phone', { y: 50, opacity: 0, duration: 1, ease: 'back.out(1.5)' }, 0.8);
+
+  gsap.to('.ph__num', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '[data-ph]', start: 'top top', end: 'bottom top', scrub: true } });
+  $$('[data-gal]').forEach((el) => {
+    gsap.from(el, { y: 60, opacity: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%', once: true } });
+  });
+  $$('.step').forEach((el) => {
+    gsap.from(el.querySelectorAll('.step__body > *'), { y: 30, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 80%', once: true } });
+  });
+  gsap.from('.next__num', { xPercent: 15, ease: 'none', scrollTrigger: { trigger: '.next', start: 'top bottom', end: 'center center', scrub: true } });
+
+  const mm = newMM();
+  mm.add('(min-width: 52rem) and (hover: hover) and (pointer: fine)', () => {
+    const off: Array<() => void> = [];
+    const mock = document.querySelector<HTMLElement>('.ph__mock');
+    if (mock) {
+      const rx = gsap.quickTo(mock, 'rotationX', { duration: 0.8, ease: 'power3.out' });
+      const ry = gsap.quickTo(mock, 'rotationY', { duration: 0.8, ease: 'power3.out' });
+      const move = (e: PointerEvent) => { ry((e.clientX / innerWidth - 0.5) * 10); rx(-(e.clientY / innerHeight - 0.5) * 7); };
+      window.addEventListener('pointermove', move);
+      off.push(() => window.removeEventListener('pointermove', move));
+    }
+    const cur = document.querySelector<HTMLElement>('.cursor');
+    const link = document.querySelector<HTMLElement>('[data-next]');
+    if (cur && link) {
+      const cx = gsap.quickTo(cur, 'x', { duration: 0.35, ease: 'power3.out' });
+      const cy = gsap.quickTo(cur, 'y', { duration: 0.35, ease: 'power3.out' });
+      const move = (e: PointerEvent) => { cx(e.clientX); cy(e.clientY); };
+      const enter = () => { cur.textContent = link.dataset.cursor ?? ''; gsap.to(cur, { scale: 1, duration: 0.3, ease: 'back.out(2)' }); };
+      const out = () => gsap.to(cur, { scale: 0, duration: 0.25 });
+      window.addEventListener('pointermove', move); link.addEventListener('pointerenter', enter); link.addEventListener('pointerleave', out);
+      off.push(() => { window.removeEventListener('pointermove', move); link.removeEventListener('pointerenter', enter); link.removeEventListener('pointerleave', out); gsap.set(cur, { scale: 0 }); });
+    }
+    return () => off.forEach((f) => f());
+  });
 }
+
+/* ---------- Ciclo de vida con View Transitions ---------- */
+let ctx: gsap.Context | null = null;
+let lastBody: HTMLElement | null = null;
+
+function boot() {
+  document.documentElement.classList.add('js');
+  if (reduce) { document.documentElement.classList.remove('intro-on'); return; }
+  const delay = document.documentElement.classList.contains('intro-on') && document.querySelector('.hero') ? 1.25 : 0;
+  ctx = gsap.context(() => {
+    nav();
+    intro();
+    hero(delay);
+    magnetic();
+    reveals();
+    marquee();
+    bridge();
+    projects();
+    lines();
+    about();
+    projectPage();
+  });
+  // Tras una navegación: primero se recalcula el layout (secciones fijadas) y luego se va arriba o a la ancla.
+  ScrollTrigger.refresh();
+  const go = () => {
+    const hash = location.hash && document.getElementById(location.hash.slice(1));
+    lenis?.resize(); // el límite de scroll de Lenis se recalcula con el nuevo contenido
+    lenis?.scrollTo(hash || 0, { immediate: true, force: true });
+  };
+  go();
+  requestAnimationFrame(() => { ScrollTrigger.refresh(); go(); });
+}
+function teardown() {
+  mms.splice(0).forEach((m) => m.revert());
+  ctx?.revert(); ctx = null;
+  ScrollTrigger.getAll().forEach((t) => t.kill());
+}
+function ensureBoot() {
+  if (lastBody === document.body) return;
+  lastBody = document.body;
+  boot();
+}
+document.addEventListener('astro:before-swap', teardown);
+document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'));
+document.addEventListener('astro:page-load', ensureBoot);
+
+/* Sin movimiento si el usuario lo pide: todo el contenido ya está visible en el HTML. */
+if (!reduce) smoothScroll();
+ensureBoot();

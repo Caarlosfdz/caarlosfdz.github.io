@@ -1,0 +1,274 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Smoke from '../../components/Smoke.astro';
+import BrowserFrame from '../../components/BrowserFrame.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const todos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+  return todos.map((p, i) => ({ params: { slug: p.id }, props: { p, next: todos[(i + 1) % todos.length] } }));
+}
+const { p, next } = Astro.props;
+const d = p.data;
+const proximo = d.estado === 'proximamente';
+const titulo = d.titulo || 'Próximamente';
+const num = String(d.orden).padStart(2, '0');
+const nextTitulo = next.data.titulo || 'Próximamente';
+const host = (u: string) => { try { return new URL(u).hostname; } catch { return ''; } };
+const pend = (t: string) => t.startsWith('[REVISAR]');
+const pasos = [
+  { k: 'Reto', t: d.reto },
+  { k: 'Proceso', t: d.proceso },
+  { k: 'Solución', t: d.solucion, lista: d.solucionLista },
+  { k: 'Resultado', t: d.resultado },
+].filter((x) => x.t || (x.lista && x.lista.length));
+---
+<Base
+  title={`${titulo} | Carlos Fernández`}
+  description={d.resumen || 'Un nuevo proyecto en preparación. Pronto, más trabajo en el portfolio de Carlos Fernández.'}
+>
+  <main id="contenido" class="pp">
+    <!-- ===== Cabecera ===== -->
+    <section class="ph section section--dark" aria-labelledby="ph-t" data-ph>
+      <div class="section__bg" aria-hidden="true">
+        <Smoke uid="ph" />
+        <span class="ph__glow"></span>
+        <span class="vignette"></span>
+        <span class="grain"></span>
+      </div>
+      <span class="ph__num display" aria-hidden="true" transition:name={`num-${p.id}`}>{num}</span>
+
+      <div class="wrap ph__grid">
+        <div class="ph__copy">
+          <a class="back" href="/#proyectos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            Todos los proyectos
+          </a>
+          {d.etiqueta && <p class:list={['tag', { 'tag--edu': d.etiqueta === 'Proyecto académico' }]}>{d.etiqueta}</p>}
+          <h1 class:list={['ph__title', 'display', { 'ph__title--next': proximo && !d.titulo }]} id="ph-t" transition:name={`titulo-${p.id}`}>{titulo}</h1>
+          {d.resumen && <p class="ph__sum">{d.resumen}</p>}
+          {proximo && !d.resumen && <p class="ph__sum">Este es el tercer proyecto y todavía lo estoy preparando. Cuando esté listo, lo verás aquí.</p>}
+          {d.aviso && <p class="aviso"><strong>Ojo:</strong> {d.aviso}</p>}
+          <div class="ph__btns">
+            {d.url && <a class="btn" href={d.url} target="_blank" rel="noopener" data-magnetic>Ver en vivo</a>}
+            <a class="btn btn--ghost" href="/#proyectos">Volver a proyectos</a>
+          </div>
+        </div>
+
+        <div class="ph__mock" data-tilt>
+          {d.portada ? (
+            <>
+              <BrowserFrame class="ph__main" src={d.portada} alt={`Portada de ${titulo}`} host={d.barra || host(d.url)} loading="eager" sizes="(min-width: 52rem) 52vw, 94vw" />
+              {d.movil && <figure class="ph__phone"><Image src={d.movil} alt="Chat de asistente de la landing" widths={[200, 300, 400]} sizes="(min-width: 52rem) 12vw, 28vw" format="webp" /></figure>}
+            </>
+          ) : (
+            <div class="ghost" aria-hidden="true">
+              <div class="ghost__bar"><i></i><i></i><i></i></div>
+              <div class="ghost__body"><b></b><b></b><b></b></div>
+            </div>
+          )}
+          <p class="hand ph__note" aria-hidden="true">
+            <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M110 10C80 4 40 14 28 46c-2 6-3 12-2 18"/><path data-draw d="M14 52l12 14 14-12"/></svg>
+            {proximo ? 'aquí irá el proyecto' : 'así se ve por fuera'}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Ficha ===== -->
+    <section class="ficha section--light" aria-label="Ficha del proyecto">
+      <div class="wrap ficha__grid">
+        <div><p class="ficha__k">Mi papel</p><p class="ficha__v">{d.papel || 'Por definir'}</p></div>
+        <div><p class="ficha__k">Tipo</p><p class="ficha__v">{d.etiqueta || 'Por definir'}</p></div>
+        <div><p class="ficha__k">Enlace</p><p class="ficha__v">{d.url ? (<a href={d.url} target="_blank" rel="noopener">{host(d.url) || 'Abrir'}</a>) : 'Aún sin enlace'}</p></div>
+      </div>
+    </section>
+
+    <!-- ===== Reto, proceso, solución y resultado ===== -->
+    {pasos.length > 0 && (
+      <section class="story section section--light" aria-label="Cómo fue el proyecto">
+        <div class="section__bg" aria-hidden="true"><Smoke tone="light" uid="story" /><span class="grain"></span></div>
+        <div class="wrap">
+          {pasos.map((x, i) => (
+            <article class="step">
+              <header class="step__head">
+                <span class="step__n display" aria-hidden="true">{i + 1}</span>
+                <h2 class="step__t display" data-lines><span class="line"><span class="line__in">{x.k}</span></span></h2>
+              </header>
+              <div class="step__body">
+                {x.t && <p class:list={['step__p', { pend: pend(x.t) }]}>{x.t}</p>}
+                {x.lista && x.lista.length > 0 && (
+                  <div class="lists">
+                    {x.lista.map((l) => (
+                      <section class="list">
+                        <h3>{l.titulo}</h3>
+                        <ul>{l.items.map((it) => <li>{it}</li>)}</ul>
+                      </section>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ===== Galería ===== -->
+    {d.galeria.length > 0 && (
+      <section class="gal section section--dark" aria-labelledby="gal-t">
+        <div class="section__bg" aria-hidden="true"><Smoke uid="gal" /><span class="gal__glow"></span><span class="vignette"></span><span class="grain"></span></div>
+        <div class="wrap">
+          <h2 class="h2" id="gal-t" data-lines><span class="line"><span class="line__in">Galería.</span></span></h2>
+          <p class="hand gal__hand" aria-hidden="true">
+            <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path data-draw d="M10 12C40 4 82 14 94 46c2 6 3 12 2 18"/><path data-draw d="M82 52l14 14 14-12"/></svg>
+            las secciones, una a una
+          </p>
+          <ul class="gal__grid">
+            {d.galeria.map((g, i) => (
+              <li class:list={['g', { 'g--wide': i === 0, 'g--narrow': g.imagen.width < 700 }]} data-gal>
+                <BrowserFrame src={g.imagen} alt={g.alt} host={i === 0 ? (d.barra || host(d.url)) : ''} sizes={i === 0 ? '(min-width: 52rem) 80vw, 94vw' : '(min-width: 52rem) 40vw, 94vw'} />
+                {g.pie && <p class="g__pie">{g.pie}</p>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
+    <!-- ===== Enlace en vivo ===== -->
+    {d.url && (
+      <section class="live section" aria-labelledby="live-t">
+        <div class="section__bg" aria-hidden="true"><span class="live__orb"></span><span class="grain"></span></div>
+        <div class="wrap live__in">
+          <h2 class="h2" id="live-t" data-lines><span class="line"><span class="line__in">Míralo funcionando.</span></span></h2>
+          {d.aviso && <p class="live__aviso">{d.aviso}</p>}
+          <a class="btn btn--dark" href={d.url} target="_blank" rel="noopener" data-magnetic>Abrir {host(d.url) || 'el proyecto'}</a>
+        </div>
+      </section>
+    )}
+
+    <!-- ===== Siguiente proyecto ===== -->
+    <section class="next section section--dark" aria-labelledby="next-t">
+      <div class="section__bg" aria-hidden="true"><Smoke uid="next" /><span class="vignette"></span><span class="grain"></span></div>
+      <a class="next__link" href={`/proyectos/${next.id}/`} data-cursor="Ver proyecto" data-next>
+        <span class="next__fill" aria-hidden="true"></span>
+        <span class="next__num display" aria-hidden="true">{String(next.data.orden).padStart(2, '0')}</span>
+        <span class="wrap next__in">
+          <span class="next__k">Siguiente proyecto</span>
+          <span class="next__t display" id="next-t">{nextTitulo}</span>
+          {next.data.etiqueta && next.data.titulo && <span class="next__r">{next.data.etiqueta}</span>}
+        </span>
+      </a>
+    </section>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 45%, transparent 40%, rgb(0 0 0 / 0.75)); }
+  .tag { display: inline-block; padding: 0.3rem 0.8rem; border-radius: var(--radius); font-size: var(--step--1); font-weight: 600; background: rgb(255 255 255 / 0.1); color: var(--cal); }
+  .tag--edu { background: var(--accent); color: var(--on-accent); }
+
+  /* ---------- Cabecera ---------- */
+  .ph { padding-top: clamp(7rem, 12vw, 10rem); padding-bottom: clamp(4rem, 8vw, 7rem); min-height: 88svh; display: grid; align-items: center; }
+  .ph__glow { position: absolute; width: 70vmax; aspect-ratio: 1; right: -25vmax; top: -10vmax; border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 38%, transparent), transparent 70%); }
+  .ph__num { position: absolute; z-index: -1; left: -0.05em; top: 0.1em; font-size: clamp(14rem, 8rem + 32vw, 42rem); line-height: 0.8; letter-spacing: -0.06em; user-select: none;
+    color: transparent; -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.3); background: linear-gradient(180deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.01) 75%);
+    -webkit-background-clip: text; background-clip: text; will-change: transform; }
+  .ph__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); align-items: center; }
+  .ph__title.ph__title--next { font-size: clamp(2rem, 1rem + 3.4vw, 4.6rem); }
+  .ph__copy { display: grid; gap: var(--space-2); justify-items: start; }
+  .back { display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; font-weight: 600; font-size: var(--step--1); opacity: 0.85; margin-bottom: var(--space-1); }
+  .back svg { width: 1.1rem; height: 1.1rem; }
+  .back:hover { color: var(--accent); opacity: 1; }
+  .ph__title { font-size: clamp(2.4rem, 1.2rem + 4.2vw, 5.8rem); overflow-wrap: break-word; max-width: 100%; }
+  .ph__sum { max-width: 30rem; font-size: var(--step-1); line-height: 1.35; color: rgb(236 233 228 / 0.88); }
+  .aviso { max-width: 30rem; padding: 0.7rem 1rem; border-radius: 0.8rem; background: rgb(198 241 53 / 0.1); box-shadow: inset 3px 0 0 var(--accent); font-size: var(--step--1); }
+  .ph__btns { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+  .ph__mock { position: relative; perspective: 1400px; transform-style: preserve-3d; }
+  .ph__mock :global(.ph__main) { margin-inline: auto; }
+  .ph__phone { position: absolute; z-index: 3; right: 2%; bottom: -8%; width: 20%; margin: 0; border-radius: 1.4rem; overflow: hidden; border: 5px solid #0a0a0b;
+    box-shadow: 0 30px 60px -10px rgb(0 0 0 / 0.8), 0 0 0 1.5px #3a3a40; background: #fff; }
+  .ph__phone :global(img) { width: 100%; height: auto; }
+  .ph__note { position: absolute; left: 0; bottom: -4.2rem; display: flex; align-items: flex-end; gap: 0.4rem; transform: rotate(-2deg); }
+  .ph__note .arrow { width: 3.6rem; transform: rotate(-12deg); }
+  .ghost { border: 1.5px dashed rgb(255 255 255 / 0.3); border-radius: 0.9rem; overflow: hidden; aspect-ratio: 16 / 11; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.06); }
+  .ghost__bar { display: flex; gap: 0.35rem; padding: 0.6rem 0.8rem; background: rgb(255 255 255 / 0.06); }
+  .ghost__bar i { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: rgb(255 255 255 / 0.25); }
+  .ghost__body { display: grid; gap: 0.9rem; padding: 1.6rem; align-content: start; }
+  .ghost__body b { display: block; height: 1rem; border-radius: 999px; background: rgb(255 255 255 / 0.12); }
+  .ghost__body b:first-child { width: 55%; height: 2rem; background: color-mix(in srgb, var(--accent) 45%, transparent); }
+  .ghost__body b:nth-child(2) { width: 88%; } .ghost__body b:nth-child(3) { width: 42%; }
+  @media (min-width: 52rem) { .ph__grid { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: var(--space-4); } }
+
+  /* ---------- Ficha ---------- */
+  .ficha { background: var(--accent); color: var(--on-accent); padding-block: var(--space-4); position: relative; z-index: 2; }
+  .ficha__grid { display: grid; gap: var(--space-3); }
+  .ficha__k { font-size: var(--step--1); font-weight: 600; opacity: 0.7; }
+  .ficha__v { font-family: var(--font-display); font-stretch: 112%; font-weight: 800; font-size: var(--step-1); overflow-wrap: anywhere; }
+  .ficha__v a { text-decoration: underline; text-underline-offset: 0.2em; }
+  @media (min-width: 52rem) { .ficha__grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-5); } }
+
+  /* ---------- Historia ---------- */
+  .step { display: grid; gap: var(--space-3); padding-block: var(--space-5); border-top: 1.5px solid var(--tinta); }
+  .step:first-child { border-top: 0; }
+  .step__head { display: flex; align-items: center; gap: var(--space-2); }
+  .step__n { display: grid; place-items: center; width: 3rem; aspect-ratio: 1; border-radius: 50%; background: var(--tinta); color: var(--accent); font-size: 1.4rem; flex: none; }
+  .step__t { font-size: clamp(2.2rem, 1.2rem + 4vw, 5rem); }
+  .step__p { max-width: 38rem; font-size: var(--step-1); line-height: 1.45; }
+  .step__p.pend { display: inline; padding: 0.15em 0.4em; background: var(--accent); border-radius: 0.3em; box-decoration-break: clone; -webkit-box-decoration-break: clone; font-size: var(--step-0); }
+  .step__body { display: grid; gap: var(--space-3); align-content: start; }
+  .lists { display: grid; gap: var(--space-3); }
+  .list { padding: var(--space-3); border-radius: 1.25rem; background: rgb(255 255 255 / 0.6); box-shadow: 0 1px 0 #fff inset, 0 20px 40px -26px rgb(0 0 0 / 0.4); }
+  .list h3 { margin: 0 0 var(--space-2); font-family: var(--font-display); font-stretch: 112%; font-size: var(--step-1); }
+  .list ul { display: grid; gap: 0.5rem; }
+  .list li { position: relative; padding-left: 1.6rem; }
+  .list li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 0.7rem; aspect-ratio: 1; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--tinta); }
+  @media (min-width: 52rem) {
+    .step { grid-template-columns: 0.55fr 1.45fr; gap: var(--space-5); }
+    .step__head { align-self: start; position: sticky; top: 7rem; }
+    .lists { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---------- Galería ---------- */
+  .gal__glow { position: absolute; width: 60vw; aspect-ratio: 1; left: -20vw; top: 25%; border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 24%, transparent), transparent 70%); }
+  .gal__hand { display: flex; align-items: flex-end; gap: 0.4rem; margin-top: var(--space-1); transform: rotate(-2deg); }
+  .gal__hand .arrow { width: 3.6rem; transform: scaleX(-1) rotate(-12deg); }
+  .gal__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); margin-top: var(--space-5); }
+  .g { grid-column: span 12; display: grid; gap: 0.7rem; justify-items: center; align-content: start; }
+  .g :global(.bf) { margin-inline: auto; }
+  .g__pie { font-size: var(--step--1); color: rgb(236 233 228 / 0.7); }
+  @media (min-width: 52rem) {
+    .g { grid-column: span 6; }
+    .g--wide { grid-column: span 12; }
+    .g--narrow { grid-column: span 4; }
+  }
+
+  /* ---------- Enlace en vivo ---------- */
+  .live { background: linear-gradient(160deg, var(--accent-hi), var(--accent) 50%, var(--accent-lo) 160%); color: var(--on-accent); }
+  .live__orb { position: absolute; width: 50vmax; aspect-ratio: 1; right: -15vmax; top: -22vmax; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 255 255 / 0.55), transparent 70%); }
+  .live .grain { mix-blend-mode: multiply; opacity: 0.18; }
+  .live__in { display: grid; gap: var(--space-3); justify-items: start; }
+  .live__aviso { max-width: 30rem; font-weight: 500; }
+
+  /* ---------- Siguiente ---------- */
+  .next { padding-block: 0; }
+  .next__link { position: relative; isolation: isolate; overflow: hidden; display: block; text-decoration: none; padding-block: clamp(5rem, 11vw, 9rem); }
+  .next__fill { position: absolute; inset: 0; z-index: -1; background: var(--accent); transform: scaleY(0); transform-origin: bottom; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .next__num { position: absolute; z-index: -1; right: -0.04em; top: 50%; translate: 0 -50%; font-size: clamp(12rem, 6rem + 26vw, 34rem); line-height: 0.8; letter-spacing: -0.06em;
+    color: transparent; -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.3); transition: -webkit-text-stroke-color 0.4s; }
+  .next__in { display: grid; gap: 0.6rem; transition: color 0.4s; }
+  .next__k { font-family: var(--font-hand); font-size: 1.8rem; color: var(--accent); transition: color 0.4s; }
+  .next__t { font-size: clamp(1.6rem, 0.6rem + 6vw, 8rem); overflow-wrap: break-word; }
+  .next__r { font-size: var(--step-0); opacity: 0.75; }
+  @media (hover: hover) {
+    .next__link:hover .next__fill { transform: scaleY(1); }
+    .next__link:hover .next__in, .next__link:hover .next__k { color: var(--on-accent); }
+    .next__link:hover .next__num { -webkit-text-stroke-color: rgb(11 11 12 / 0.35); }
+  }
+</style>

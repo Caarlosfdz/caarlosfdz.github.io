@@ -4,7 +4,7 @@ Portfolio de Carlos Fernández: diseño web, logotipos e identidad y redes socia
 
 Astro (estático) + CSS propio + GSAP/ScrollTrigger + Lenis. Se publicará en https://caarlosfdz.github.io.
 
-> Estado: **fase 1** (sistema de diseño y hero). El brief completo está en `BRIEF.md`.
+> Estado: **fase 3** (home y páginas de proyecto). El brief completo está en `BRIEF.md`.
 
 ## Arrancar en local
 
@@ -22,7 +22,7 @@ npm run preview  # sirve /dist
 | Cambiar el color de acento | `src/styles/tokens.css` (variable `--accent`) |
 | Rellenar email, WhatsApp e Instagram | `src/config/contacto.ts` |
 | Cambiar textos del hero | `src/components/Hero.astro` |
-| Añadir o editar un proyecto | un archivo `.md` en `src/content/proyectos/` |
+| Añadir o editar un proyecto | un archivo `.md` en `src/content/proyectos/` (ver abajo) |
 | Sustituir el retrato | `src/assets/carlos-recorte.png` |
 
 `assets-brutos/`, `referencias/` y `BRIEF.md` no se publican: Astro solo sirve `src/` y `public/`.
@@ -33,3 +33,12 @@ npm run preview  # sirve /dist
 - [ ] `whatsapp` en `src/config/contacto.ts` (botón principal de la web)
 - [ ] `instagram` en `src/config/contacto.ts`
 - [ ] Textos marcados con `[REVISAR]` en `src/content/proyectos/`
+
+## Añadir un proyecto
+
+1. Copia las capturas a `src/assets/proyectos/`.
+2. Duplica `src/content/proyectos/nernutri.md`, cámbiale el nombre (será la URL: `/proyectos/nombre/`) y rellena los campos.
+3. En `portada`, `segunda`, `tercera`, `movil` y `galeria` usa rutas como `../../assets/proyectos/mi-captura.png`.
+4. `orden` decide la posición y el número gigante (01, 02, 03…). Con `estado: proximamente` se enseña como "Próximamente".
+
+No hay que tocar ningún componente: la home y la página del proyecto se generan solas.

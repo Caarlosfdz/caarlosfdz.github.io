@@ -5,13 +5,13 @@ import { enlacePrincipal } from '../config/contacto';
   <a class="nav__logo" href="/" aria-label="Carlos Fernández, inicio">Carlos Fernández</a>
   <nav aria-label="Principal">
     <ul class="nav__links">
-      <li><a href="#proyectos">Proyectos</a></li>
-      <li><a href="#servicios">Servicios</a></li>
-      <li><a href="#sobre-mi">Sobre mí</a></li>
-      <li><a href="#trayectoria">Trayectoria</a></li>
+      <li><a href="/#proyectos">Proyectos</a></li>
+      <li><a href="/#servicios">Servicios</a></li>
+      <li><a href="/#sobre-mi">Sobre mí</a></li>
+      <li><a href="/#trayectoria">Trayectoria</a></li>
     </ul>
   </nav>
-  <a class="nav__cta" href={enlacePrincipal} data-magnetic>Hablemos</a>
+  <a class="nav__cta" href={enlacePrincipal === '#contacto' ? '/#contacto' : enlacePrincipal} data-magnetic>Hablemos</a>
 </header>
 
 <style>

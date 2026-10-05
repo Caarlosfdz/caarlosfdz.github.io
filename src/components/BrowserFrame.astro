@@ -1,0 +1,18 @@
+---
+import { Image } from 'astro:assets';
+interface Props { src: ImageMetadata; alt: string; host?: string; sizes?: string; widths?: number[]; loading?: 'lazy' | 'eager'; class?: string; }
+const { src, alt, host = '', sizes = '(min-width: 52rem) 60vw, 94vw', widths = [480, 720, 960, 1280], loading = 'lazy', class: cls } = Astro.props;
+// Nunca se enseña por encima de su tamaño real.
+---
+<figure class:list={['bf', cls]} style={`max-width:${src.width}px`}>
+  <div class="bf__bar"><i></i><i></i><i></i>{host && <span>{host}</span>}</div>
+  <Image src={src} alt={alt} widths={widths.filter((w) => w <= src.width)} sizes={sizes} format="webp" loading={loading} />
+</figure>
+<style>
+  .bf { margin: 0; width: 100%; border-radius: 0.9rem; overflow: hidden; background: #1a1a1d;
+    box-shadow: 0 40px 80px -20px rgb(0 0 0 / 0.65), 0 0 0 1px rgb(255 255 255 / 0.1); }
+  .bf :global(img) { display: block; width: 100%; height: auto; }
+  .bf__bar { display: flex; align-items: center; gap: 0.35rem; padding: 0.55rem 0.8rem; background: #232327; }
+  .bf__bar i { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: #55555c; }
+  .bf__bar span { margin-left: 0.7rem; flex: 1; padding: 0.18rem 0.8rem; border-radius: 999px; background: #0e0e10; color: #a8a8ae; font-size: 0.75rem; }
+</style>

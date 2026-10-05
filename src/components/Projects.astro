@@ -2,21 +2,9 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Smoke from './Smoke.astro';
-import n1 from '../assets/proyectos/nernutri-01-inicio-hero.png';
-import n2 from '../assets/proyectos/nernutri-05-como-funciona.png';
-import n3 from '../assets/proyectos/nernutri-06-testimonios.png';
-import m1 from '../assets/proyectos/mueble-01-hero.png';
-import m2 from '../assets/proyectos/mueble-10-admin-dashboard.png';
-import m3 from '../assets/proyectos/mueble-07-formulario.png';
-import mchat from '../assets/proyectos/mueble-08-chat-asistente.png';
 
 const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
 
-// Capturas de cada proyecto (se enseñan siempre por debajo de su tamaño real).
-const imagenes: Record<string, { main: ImageMetadata; second: ImageMetadata; third?: ImageMetadata; phone?: ImageMetadata; host: string }> = {
-  nernutri: { main: n1, second: n2, third: n3, host: 'nernutri.es' },
-  'tarjeta-socio': { main: m1, second: m2, third: m3, phone: mchat, host: 'Proyecto de clase' },
-};
 const host = (u: string) => { try { return new URL(u).hostname; } catch { return ''; } };
 ---
 <section class="proyectos section section--light" id="proyectos" aria-labelledby="proy-h">
@@ -34,21 +22,21 @@ const host = (u: string) => { try { return new URL(u).hostname; } catch { return
     <div class="stack">
       {proyectos.map((p, i) => {
         const d = p.data;
-        const img = imagenes[p.id];
+        const img = d.portada ? { main: d.portada, second: d.segunda ?? d.portada, third: d.tercera, phone: d.movil, host: d.barra || host(d.url) } : undefined;
         const proximo = d.estado === 'proximamente';
-        const href = proximo ? undefined : `/proyectos/${p.id}/`;
+        const href = `/proyectos/${p.id}/`;
         const Tag = href ? 'a' : 'div';
         return (
           <div class="wrap-card" style={`--i:${i}`} data-card>
             <article class:list={['card', { 'card--next': proximo }]}>
-              <span class="card__num display" aria-hidden="true" data-num>{String(d.orden).padStart(2, '0')}</span>
+              <span class="card__num display" aria-hidden="true" data-num transition:name={`num-${p.id}`}>{String(d.orden).padStart(2, '0')}</span>
               <span class="card__glow" aria-hidden="true"></span>
               <span class="card__veil" aria-hidden="true"></span>
 
               <div class="card__copy">
                 {d.etiqueta && <p class:list={['tag', { 'tag--edu': d.etiqueta === 'Proyecto académico' }]}>{d.etiqueta}</p>}
                 <h3 class="card__title display">
-                  {href ? <a href={href} data-cursor="Ver proyecto" class="card__link">{d.titulo}</a> : (d.titulo || 'Próximamente')}
+                  <a href={href} data-cursor="Ver proyecto" class="card__link" transition:name={`titulo-${p.id}`}>{d.titulo || 'Próximamente'}</a>
                 </h3>
                 {proximo && !d.resumen && <p class="card__sum">Aquí irá el proyecto 03. Estoy preparándolo.</p>}
                 {d.resumen && <p class="card__sum">{d.resumen}</p>}
@@ -57,7 +45,7 @@ const host = (u: string) => { try { return new URL(u).hostname; } catch { return
                   {d.papel && (<div><dt>Mi papel</dt><dd>{d.papel}</dd></div>)}
                   {d.url && (<div><dt>En vivo</dt><dd>{host(d.url) || 'Ver enlace'}</dd></div>)}
                 </dl>
-                {href && <a class="btn card__btn" href={href} data-magnetic>Ver proyecto</a>}
+                <a class="btn card__btn" href={href} data-magnetic>{proximo ? 'Ver la página' : 'Ver proyecto'}</a>
               </div>
 
               <div class="mocks" data-tilt aria-hidden={img ? undefined : 'true'}>
@@ -96,8 +84,11 @@ const host = (u: string) => { try { return new URL(u).hostname; } catch { return
     box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.07);
   }
   .card__num {
-    position: absolute; z-index: -1; right: 1rem; top: -0.12em; font-size: clamp(9rem, 6rem + 18vw, 24rem);
-    color: transparent; -webkit-text-stroke: 2px rgb(255 255 255 / 0.22); line-height: 1; user-select: none; will-change: transform;
+    position: absolute; z-index: -1; left: -0.04em; top: -0.16em; font-size: clamp(11rem, 6rem + 24vw, 31rem);
+    line-height: 1; user-select: none; will-change: transform; letter-spacing: -0.06em;
+    color: transparent; -webkit-text-stroke: 2.5px rgb(255 255 255 / 0.34);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.02) 70%);
+    -webkit-background-clip: text; background-clip: text;
   }
   .card__glow { position: absolute; z-index: -1; inset: 0; border-radius: inherit;
     background:
