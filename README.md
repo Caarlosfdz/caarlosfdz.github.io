@@ -29,7 +29,7 @@ npm run preview  # sirve /dist
 
 ## Pendientes
 
-- [ ] `email` en `src/config/contacto.ts`
+- [x] `email` en `src/config/contacto.ts`
 - [x] `whatsapp` en `src/config/contacto.ts` (botón principal de la web)
 - [ ] `instagram` en `src/config/contacto.ts`
 - [ ] Textos marcados con `[REVISAR]` en `src/content/proyectos/`

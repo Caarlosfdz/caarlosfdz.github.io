@@ -7,7 +7,7 @@
  *  instagram  → solo el usuario, sin @ ni URL, p. ej. "tuusuario"
  */
 export const contacto = {
-  email: '',
+  email: 'carlosfernandez.webs@gmail.com',
   whatsapp: '34644028761',
   instagram: '',
 };
