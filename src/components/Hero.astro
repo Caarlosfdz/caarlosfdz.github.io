@@ -19,7 +19,6 @@ import { enlacePrincipal } from '../config/contacto';
   </h1>
 
   <div class="hero__foot">
-    <p class="hero__lead">Diseño webs, logos y redes sociales para negocios de Cádiz y alrededores que quieren que se les vea.</p>
     <a class="btn" href={enlacePrincipal} data-magnetic>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.600-5.400A8.500 8.500 0 1 1 21 12Z"/></svg>
       Escríbeme por WhatsApp
@@ -69,10 +68,6 @@ import { enlacePrincipal } from '../config/contacto';
     </ul>
   </div>
 
-  <p class="meta meta--libre">
-    <span class="dot" aria-hidden="true"></span>
-    <span><strong>Disponible para proyectos</strong>Negocios de la zona</span>
-  </p>
 
   <p class="hero__note hand" aria-hidden="true">
     <svg class="arrow" viewBox="0 0 120 70" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="arrow__path" d="M112 8C86 4 52 12 40 44c-2 6-3 12-2 18"/><path class="arrow__path" d="M26 50l12 14 14-12"/></svg>
@@ -122,7 +117,6 @@ import { enlacePrincipal } from '../config/contacto';
     display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start;
   }
   .btn { white-space: nowrap; }
-  .hero__lead { max-width: 20rem; text-wrap: balance; text-shadow: 0 1px 14px var(--noche); }
 
   /* ---------- Escenario: capas ---------- */
   .hero__stage { position: relative; flex: 1; min-height: calc(var(--ph) + 2.5rem); }
@@ -185,7 +179,7 @@ import { enlacePrincipal } from '../config/contacto';
   .pill--3 { left: 9%; bottom: calc(var(--ph) * 0.1); rotate: -3deg; }
 
   /* ---------- Detalles laterales (solo escritorio) ---------- */
-  .meta, .hero__note, .scroll { display: none; }
+  .hero__note, .scroll { display: none; }
   .hand { font-family: var(--font-hand); font-size: 1.7rem; line-height: 1.1; color: var(--accent); }
 
   @media (max-width: 51.99rem) {
@@ -203,7 +197,6 @@ import { enlacePrincipal } from '../config/contacto';
     .hero__title { position: absolute; top: 5.2rem; left: 0; right: 0; font-size: clamp(2.4rem, 1rem + 3.9vw, 4.6rem); }
     .hero__stage { position: absolute; inset: 0; min-height: 0; }
     .hero__foot { position: absolute; left: var(--gutter); bottom: 2.75rem; padding: 0; }
-    .hero__lead { font-size: var(--step-1); line-height: 1.28; max-width: 19rem; }
 
     .hero__word { bottom: calc(var(--ph) * 0.64); font-size: 19.5vw; }
 
@@ -212,18 +205,6 @@ import { enlacePrincipal } from '../config/contacto';
     .pill--1 { left: calc(50% - var(--pw) * 0.86); bottom: calc(var(--ph) * 0.6); rotate: -7deg; }
     .pill--2 { right: calc(50% - var(--pw) * 0.9); left: auto; bottom: calc(var(--ph) * 0.7); rotate: 5deg; }
     .pill--3 { left: calc(50% + var(--pw) * 0.1); bottom: calc(var(--ph) * 0.16); rotate: -4deg; }
-
-    .meta {
-      display: flex; gap: 0.7rem; align-items: flex-start; position: absolute; z-index: 6;
-      font-size: var(--step--1); line-height: 1.35; color: rgb(236 233 228 / 0.7); max-width: 13rem;
-    }
-    .meta strong { display: block; color: var(--cal); font-weight: 600; }
-    .meta svg { width: 1.35rem; height: 1.35rem; flex: none; color: var(--accent); margin-top: 0.1rem; }
-    @media (max-height: 800px) { .meta { display: none; } }
-    .meta--libre { right: var(--gutter); top: 61%; }
-    .dot { position: relative; width: 0.7rem; height: 0.7rem; flex: none; margin-top: 0.4rem; border-radius: 50%; background: var(--accent); }
-    .dot::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: var(--accent); animation: ping 2.4s ease-out infinite; }
-    @keyframes ping { 0% { transform: scale(1); opacity: 0.55; } 70%, 100% { transform: scale(3.2); opacity: 0; } }
 
     .hero__note {
       display: block; position: absolute; z-index: 6; right: var(--gutter); bottom: 2.75rem;
