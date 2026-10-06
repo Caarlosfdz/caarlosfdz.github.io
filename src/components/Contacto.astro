@@ -1,5 +1,8 @@
 ---
 import { contacto, enlacePrincipal, enlaceEmail, enlaceInstagram } from '../config/contacto';
+// Glifo oficial de Instagram (trazado de simple-icons, tomado de los recursos de marca de Meta).
+// Normas de Meta: solo en negro o blanco, sin modificar, mínimo 29 px y margen libre de medio glifo.
+import { siInstagram } from 'simple-icons';
 ---
 <section class="cta section" id="contacto" aria-labelledby="cta-h">
   <div class="section__bg" aria-hidden="true">
@@ -24,9 +27,9 @@ import { contacto, enlacePrincipal, enlaceEmail, enlaceInstagram } from '../conf
       </a>
       {enlaceEmail && <a class="btn btn--ghost" href={enlaceEmail}>{contacto.email}</a>}
       {enlaceInstagram && (
-        <a class="btn btn--dark" href={enlaceInstagram} target="_blank" rel="noopener" aria-label={`Instagram: @${contacto.instagram} (se abre en una pestaña nueva)`}>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
-          @{contacto.instagram}
+        <a class="ig" href={enlaceInstagram} target="_blank" rel="noopener" aria-label={`Instagram: @${contacto.instagram} (se abre en una pestaña nueva)`}>
+          <svg class="ig__glyph" viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path d={siInstagram.path} fill="currentColor" /></svg>
+          <span class="ig__user">@{contacto.instagram}</span>
         </a>
       )}
     </div>
@@ -44,7 +47,14 @@ import { contacto, enlacePrincipal, enlaceEmail, enlaceInstagram } from '../conf
   .cta .grain { opacity: 0.4; background-image: url('/grain-dark.png'); }
   .cta__in { display: grid; gap: var(--space-3); justify-items: start; position: relative; }
   .cta__sub { font-size: var(--step-1); max-width: 30rem; font-weight: 500; }
-  .cta__btns { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+  .cta__btns { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
+  /* Instagram: glifo negro clicable con el usuario al lado. Margen libre ≥ medio glifo (22 px). */
+  .ig { display: inline-flex; align-items: center; gap: 22px; padding: 6px 22px 6px 0; margin-left: 22px; color: #000; text-decoration: none; border-radius: 999px; }
+  .ig__glyph { width: 44px; height: 44px; flex: none; transition: transform 0.25s; }
+  .ig__user { font-family: var(--font-display); font-stretch: 112%; font-weight: 800; font-size: var(--step-0); }
+  .ig:hover .ig__glyph { transform: scale(1.08) rotate(-6deg); }
+  .ig:hover .ig__user { text-decoration: underline; text-underline-offset: 0.2em; }
+  @media (max-width: 30rem) { .ig { margin-left: 0; } }
   .cta__dev { font-size: var(--step--1); opacity: 0.7; }
 
 </style>

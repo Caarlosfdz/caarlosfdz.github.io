@@ -412,9 +412,9 @@ function boot() {
       lenis?.resize(); // el límite de scroll de Lenis se recalcula con el nuevo contenido
       lenis?.scrollTo(hash || 0, { immediate: true, force: true });
     };
-    // En la primera carga se respeta el scroll que restaure el navegador; tras navegar, arriba o a la ancla.
+    // Primera carga: arriba del todo (o a la #sección si se entra con un enlace a ella). Tras navegar, igual.
     if (esNavegacion || location.hash) { ir(); requestAnimationFrame(() => { ScrollTrigger.refresh(); ir(); settleAbove(); }); }
-    else settleAbove();
+    else { lenis?.scrollTo(0, { immediate: true, force: true }); window.scrollTo(0, 0); settleAbove(); }
   };
   const paso = (i: number) => {
     if (token !== bootToken || !ctx) return;

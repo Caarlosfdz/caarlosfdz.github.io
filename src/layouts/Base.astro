@@ -40,6 +40,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <ClientRouter />
     <script is:inline>
       document.documentElement.classList.add('js');
+      // Al recargar, siempre arriba del todo: el navegador no restaura el scroll
+      // y se quita la #sección que haya quedado en la dirección.
+      try {
+        history.scrollRestoration = 'manual';
+        var nav = performance.getEntriesByType('navigation')[0];
+        if (nav && nav.type === 'reload' && location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+      } catch (e) {}
       try {
         if (!sessionStorage.getItem('intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           document.documentElement.classList.add('intro-on');
