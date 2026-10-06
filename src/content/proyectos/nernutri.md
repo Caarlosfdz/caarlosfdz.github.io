@@ -2,17 +2,17 @@
 orden: 1
 titulo: Nernutri
 etiqueta: Web real
-resumen: Web multipágina para Nerea Fernández, dietista con consulta 100% online.
+resumen: Web multipágina para una dietista con consulta 100% online.
 papel: Diseño y desarrollo completos
 url: https://nernutri.es
 barra: nernutri.es
 portada: ../../assets/proyectos/nernutri-01-inicio-hero.png
 segunda: ../../assets/proyectos/nernutri-05-como-funciona.png
 tercera: ../../assets/proyectos/nernutri-06-testimonios.png
-reto: "[REVISAR] Qué necesitaba Nerea antes de la web."
+reto: "[REVISAR] Qué necesitaba la clienta antes de la web."
 proceso: "[REVISAR] Cómo trabajamos: reuniones, borradores, cambios."
 solucion: Una web multipágina con Inicio, Sobre mí, Consulta Online, Servicios, Cómo funciona, Testimonios y Contacto, más las páginas legales. La portada abre con el lema «Come bien. Vive mejor.», un marquee de especialidades, los servicios, el proceso en cinco pasos, testimonios y contacto. Toda la web lleva a reservar por WhatsApp con el mensaje ya escrito.
-resultado: "[REVISAR] Qué ha conseguido Nerea con la web."
+resultado: "[REVISAR] Qué ha conseguido la clienta con la web."
 galeria:
   - imagen: ../../assets/proyectos/nernutri-01-inicio-hero.png
     alt: "Portada de Nernutri con el lema Come bien. Vive mejor."

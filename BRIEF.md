@@ -110,7 +110,7 @@ resultado, galería, enlace en vivo si existe y "siguiente proyecto" al final.
 
 ### 01 · Nernutri
 
-Web real para Nerea Fernández, dietista con consulta 100% online.
+Web real para una dietista con consulta 100% online.
 
 - URL: https://nernutri.es
 - Mi papel: diseño y desarrollo completos.
