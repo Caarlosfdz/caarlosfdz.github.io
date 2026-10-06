@@ -8,11 +8,13 @@ const servicios = [
   { nombre: 'Gestión de redes sociales', texto: 'Publicaciones con un estilo coherente y un calendario que se cumple, para que tú te dediques a tu negocio.', para: 'Negocios de Cádiz y alrededores' },
 ];
 const pasos = [
-  { t: 'Hablamos', d: 'Me cuentas qué hace tu negocio y qué necesitas. Sin compromiso.' },
+  { t: 'Hablamos', d: 'Me escribes por WhatsApp y me cuentas qué hace tu negocio y qué necesitas. Sin compromiso.' },
   { t: 'Te propongo', d: 'Te explico qué haría yo y cómo, con palabras normales.' },
-  { t: 'Lo hago', d: 'Diseño y desarrollo, y te enseño el avance para que opines.' },
-  { t: 'Lo publicamos', d: 'Lo dejo funcionando y te explico cómo tocarlo tú.' },
+  { t: 'Lo hago', d: 'Me pongo con ello y te voy enseñando el avance para que opines.' },
+  { t: 'Lo publicamos', d: 'Lo dejo funcionando y te explico cómo llevarlo tú.' },
 ];
+/* Herramientas de diseño: solo las que uso de verdad. Añade aquí las nuevas. */
+const diseno = ['Photoshop', 'Canva'];
 const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
 ---
 <section class="servicios section section--dark" id="servicios" aria-labelledby="serv-h">
@@ -35,7 +37,6 @@ const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
 
     <div class="proceso">
       <h3 class="h3" data-lines><span class="line"><span class="line__in">Cómo trabajo</span></span></h3>
-      <p class="proceso__nota">[REVISAR] Pasos de ejemplo: ajústalos a tu forma real de trabajar.</p>
       <div class="pasos-wrap">
       <svg class="pasos__line" viewBox="0 0 1000 12" preserveAspectRatio="none" aria-hidden="true"><path data-draw d="M0 6H1000" /></svg>
       <ol class="pasos" data-steps>
@@ -53,13 +54,16 @@ const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
     <div class="tools">
       <h3 class="h3" data-lines><span class="line"><span class="line__in">Con qué lo hago</span></span></h3>
       <ul class="tools__list">
+        {diseno.map((n) => (
+          <li class="tool tool--text">{n}</li>
+        ))}
         {tools.map((t) => (
           <li class="tool" title={t.title}>
             <svg viewBox="0 0 24 24" role="img" aria-label={t.title}><path d={t.path} fill="currentColor" /></svg>
           </li>
         ))}
       </ul>
-      <p class="hand tools__hand" aria-hidden="true">[REVISAR] aquí van tus herramientas de diseño</p>
+      <p class="hand tools__hand" aria-hidden="true">lo que uso ahora mismo</p>
     </div>
   </div>
 </section>
@@ -114,5 +118,6 @@ const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09); color: var(--cal); transition: color 0.3s, transform 0.3s; }
   .tool:hover { color: var(--accent); transform: translateY(-4px) rotate(-4deg); }
   .tool svg { width: 2rem; height: 2rem; }
+  .tool--text { width: auto; aspect-ratio: auto; height: 4.5rem; padding-inline: 1.4rem; font-family: var(--font-display); font-weight: 800; font-stretch: 112%; font-size: var(--step-0); letter-spacing: -0.01em; }
   .tools__hand { margin-top: var(--space-2); font-size: 1.4rem; }
 </style>

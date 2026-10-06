@@ -9,10 +9,10 @@ barra: nernutri.es
 portada: ../../assets/proyectos/nernutri-01-inicio-hero.png
 segunda: ../../assets/proyectos/nernutri-05-como-funciona.png
 tercera: ../../assets/proyectos/nernutri-06-testimonios.png
-reto: "[REVISAR] Qué necesitaba la clienta antes de la web."
-proceso: "[REVISAR] Cómo trabajamos: reuniones, borradores, cambios."
+reto: "Tenía su consulta online y solo estaba en Instagram. Le faltaba un sitio propio donde explicar con calma qué hace, cómo trabaja y cómo reservar."
+proceso: "No había un encargo cerrado. Partí de un prototipo y le fui dando forma con ella, sección a sección, hasta que la web contaba bien su manera de trabajar."
 solucion: Una web multipágina con Inicio, Sobre mí, Consulta Online, Servicios, Cómo funciona, Testimonios y Contacto, más las páginas legales. La portada abre con el lema «Come bien. Vive mejor.», un marquee de especialidades, los servicios, el proceso en cinco pasos, testimonios y contacto. Toda la web lleva a reservar por WhatsApp con el mensaje ya escrito.
-resultado: "[REVISAR] Qué ha conseguido la clienta con la web."
+resultado: "Ahora tiene un sitio propio al que mandar a quien la descubre en redes, con la reserva por WhatsApp a un toque. Ya le han escrito las primeras personas desde la web; el siguiente paso es darle más visibilidad con contenido en redes."
 galeria:
   - imagen: ../../assets/proyectos/nernutri-01-inicio-hero.png
     alt: "Portada de Nernutri con el lema Come bien. Vive mejor."

@@ -32,7 +32,7 @@ solucionLista:
       - Ajustes de marca y colores con vista previa de la tarjeta
       - Gestión de beneficios, niveles, preguntas frecuentes y testimonios
       - Listado de solicitudes con exportación a CSV
-resultado: "[REVISAR] Nota o comentario del profesor, si quieres contarlo."
+resultado: "Una landing y un panel que funcionan de verdad: las altas del formulario llegan a la hoja de cálculo y todo el contenido se gestiona desde el panel."
 galeria:
   - imagen: ../../assets/proyectos/mueble-01-hero.png
     alt: "Portada de la landing con la tarjeta de socio animada"
