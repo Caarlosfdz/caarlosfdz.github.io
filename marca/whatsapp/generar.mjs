@@ -13,9 +13,13 @@ const shot = async (q, file, clip) => {
   await p.screenshot({ path: path.join(dir, file), type: 'jpeg', quality: 92, clip });
 };
 const strip = { x: 0, y: 102, width: 1600, height: 696 }; // franja central 2,3:1
-for (const v of ['a', 'b', 'c']) {
+for (const v of ['b', 'c']) {
   await shot(`v=${v}`, `banner-whatsapp-${v}.jpg`);
   await shot(`v=${v}&sim=1`, `simulacion/${v}-16x9.jpg`);
   await shot(`v=${v}&sim=1`, `simulacion/${v}-franja-2.3x1.jpg`, strip);
 }
+// Variante A, ajustada a WhatsApp de PC: solo se ve de 0 a 500 px y la foto es un círculo de 300 px.
+await shot('v=a', 'banner-whatsapp-a.jpg');
+await shot('v=a&sim=1', 'simulacion/a-pc-500.jpg', { x: 0, y: 0, width: 1600, height: 500 });
+await shot('v=a&sim=1', 'simulacion/a-entero.jpg');
 await b.close();

@@ -60,10 +60,16 @@
     background: radial-gradient(circle at 50% 26%, var(--accent-hi), var(--accent) 40%, var(--accent-lo) 105%); box-shadow: 0 0 0 10px #f2f2f2, 0 20px 60px rgb(0 0 0 / 0.5); }
   .sim img { position: absolute; left: 50%; bottom: -6%; width: 104%; transform: translateX(-50%); }
   [data-sim] .sim { display: block; }
+  /* Variante A: medidas de WhatsApp de PC (foto de 300 px centrada, desde y 330) */
+  [data-v='a'] .halo { top: 470px; width: 1000px; height: 1000px; }
+  [data-v='a'] .sim { top: 480px; width: 300px; height: 300px; box-shadow: 0 0 0 6px #f2f2f2, 0 14px 40px rgb(0 0 0 / 0.5); }
+  [data-v='a'] .g-circle { top: 480px; width: 300px; height: 300px; }
+  [data-v='a'] .g-strip { top: 0; height: 500px; }
 
   /* ---------- Guías (solo para revisar) ---------- */
   .guias { display: none; position: absolute; inset: 0; z-index: 60; pointer-events: none; }
   [data-guias] .guias { display: block; }
+  .g-pc { display: none; } [data-v='a'] .g-pc { display: block; } [data-v='a'] .g-old, [data-v='a'] .g-margin { display: none; }
   .g-line { position: absolute; left: 0; right: 0; border-top: 2px dashed #ff3bd4; }
   .g-strip { position: absolute; left: 0; right: 0; top: 102px; height: 696px; outline: 3px solid #29d3ff; }
   .g-margin { position: absolute; left: 96px; right: 96px; top: 0; bottom: 0; border-inline: 2px dashed #ffb21e; }
@@ -86,38 +92,43 @@
   <span class="halo"></span>
   <span class="vignette"></span>
 
-  <!-- ================= VARIANTE A · Tiras cruzadas ================= -->
+  <!-- ================= VARIANTE A · Tiras cruzadas (ajustada a WhatsApp de PC) =================
+       Zonas medidas en WhatsApp de PC (sobre 1600 × 900):
+       · solo se ve de 0 a 500 px de alto
+       · la foto de perfil es un círculo de ~300 px centrado (x 650–950) que tapa desde y 330
+       · servicios entre y 40 y 300; de 300 a 500 solo laterales (x < 600 y x > 1000)
+       · de 500 hacia abajo, solo fondo -->
   <div class="v va">
-    <!-- tira oscura con letra de contorno: cruza por detrás de la lima -->
-    <div class="at band band--dark" style="--x:800px; --y:384px; --r:-7deg; --h:124px; --jc:flex-start; --pl:560px; z-index:5; font-size:88px">
+    <!-- tira oscura con letra de contorno: "Logotipos" a la izquierda, por debajo de la lima -->
+    <div class="at band band--dark" style="--x:800px; --y:276px; --r:5deg; --h:104px; --jc:flex-start; --pl:600px; z-index:7; font-size:76px">
       <div class="band__row">
-        <svg class="star"><use href="#star"/></svg>
-        <span class="display w">Logotipos</span>
-        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
+        <svg class="star"><use href="#star"/></svg><span class="display w">Logotipos</span><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
       </div>
     </div>
-    <!-- tira lima (por delante) -->
-    <div class="at band band--lime" style="--x:800px; --y:236px; --r:4deg; --h:156px; z-index:6; font-size:68px">
+    <!-- tira lima (por delante): "Diseño web ✦ Redes sociales" -->
+    <div class="at band band--lime" style="--x:800px; --y:108px; --r:-3deg; --h:118px; z-index:6; font-size:60px">
       <div class="band__row">
-        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
-        <span class="display">Diseño web</span><svg class="star"><use href="#star"/></svg>
-        <span class="display">Redes sociales</span>
-        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
+        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><span class="display">Diseño web</span><svg class="star"><use href="#star"/></svg><span class="display">Redes sociales</span><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
       </div>
     </div>
-    <!-- subrayado a mano bajo "Logotipos" -->
-    <svg class="doodle" viewBox="0 0 520 60" style="left:170px; top:470px; width:430px; z-index:7; transform:rotate(-7deg)"><path d="M6 30c90-16 230-22 360-14 50 3 100 8 148 16" stroke="var(--accent)" stroke-width="8"/><path d="M40 48c110-10 250-12 400-2" stroke="var(--accent)" stroke-width="4" opacity="0.7"/></svg>
-    <!-- destellos -->
-    <svg class="doodle" style="left:150px; top:96px; width:62px; height:62px; z-index:8; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
-    <svg class="doodle" style="left:1400px; top:96px; width:40px; height:40px; z-index:8; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
-    <svg class="doodle" style="left:1420px; top:560px; width:54px; height:54px; z-index:8; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
-    <svg class="doodle" viewBox="0 0 80 80" style="left:150px; top:600px; width:80px; z-index:8"><path d="M40 6v16M40 58v16M6 40h16M58 40h16M16 16l10 10M54 54l10 10M64 16 54 26M26 54 16 64" stroke="var(--cal)" stroke-width="4" opacity="0.8"/></svg>
-    <!-- profundidad: estrellas gigantes en contorno detrás, a los lados del hueco -->
-    <svg class="doodle" viewBox="0 0 24 24" style="left:150px; top:560px; width:330px; z-index:3; transform:rotate(12deg)"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" stroke="rgb(236 233 228 / 0.22)" stroke-width="0.18"/></svg>
-    <svg class="doodle" viewBox="0 0 24 24" style="left:1160px; top:600px; width:260px; z-index:3; transform:rotate(-8deg)"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" fill="rgb(198 241 53 / 0.12)" stroke="rgb(198 241 53 / 0.45)" stroke-width="0.14"/></svg>
-    <!-- nota "¿Hablamos?" con flecha hacia la foto -->
-    <p class="at hand" style="--x:1240px; --y:452px; --r:-6deg; font-size:92px; z-index:9">¿Hablamos?</p>
-    <svg class="doodle" viewBox="0 0 220 160" style="left:1030px; top:500px; width:200px; z-index:9"><path d="M206 12c-60-4-118 16-150 60-12 16-18 36-20 54" stroke="var(--accent)" stroke-width="7"/><path d="M14 100l22 32 28-30" stroke="var(--accent)" stroke-width="7"/></svg>
+    <!-- subrayado a mano bajo "Logotipos" (sigue la inclinación de la tira) -->
+    <svg class="doodle" viewBox="0 0 520 60" style="left:180px; top:270px; width:400px; z-index:8; transform:rotate(5deg)"><path d="M6 30c90-16 230-22 360-14 50 3 100 8 148 16" stroke="var(--accent)" stroke-width="8"/><path d="M40 48c110-10 250-12 400-2" stroke="var(--accent)" stroke-width="4" opacity="0.7"/></svg>
+
+    <!-- franja 300–500: solo laterales -->
+    <!-- izquierda: destellos -->
+    <svg class="doodle" style="left:150px; top:380px; width:58px; height:58px; z-index:8; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" viewBox="0 0 80 80" style="left:330px; top:400px; width:76px; z-index:8"><path d="M40 6v16M40 58v16M6 40h16M58 40h16M16 16l10 10M54 54l10 10M64 16 54 26M26 54 16 64" stroke="var(--cal)" stroke-width="4" opacity="0.85"/></svg>
+    <svg class="doodle" style="left:520px; top:390px; width:30px; height:30px; z-index:8; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
+    <!-- derecha: "¿Hablamos?" con flecha completa hacia la foto -->
+    <p class="hand" style="position:absolute; left:1150px; top:330px; font-size:80px; z-index:9; transform:rotate(-5deg)">¿Hablamos?</p>
+    <svg class="doodle" viewBox="0 0 160 100" style="left:1080px; top:398px; width:140px; z-index:9"><path d="M150 10c-40 2-80 14-104 40-8 9-14 20-18 32" stroke="var(--accent)" stroke-width="7"/><path d="M8 60l18 28 26-18" stroke="var(--accent)" stroke-width="7"/></svg>
+    <svg class="doodle" style="left:1440px; top:440px; width:44px; height:44px; z-index:8; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
+    <!-- arriba, destellos pequeños fuera de las tiras -->
+    <svg class="doodle" style="left:1440px; top:236px; width:34px; height:34px; z-index:8; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
+
+    <!-- de 500 hacia abajo: solo fondo (estrellas grandes en contorno) -->
+    <svg class="doodle" viewBox="0 0 24 24" style="left:150px; top:560px; width:300px; z-index:3; transform:rotate(12deg)"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" stroke="rgb(236 233 228 / 0.22)" stroke-width="0.18"/></svg>
+    <svg class="doodle" viewBox="0 0 24 24" style="left:1170px; top:580px; width:250px; z-index:3; transform:rotate(-8deg)"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" fill="rgb(198 241 53 / 0.12)" stroke="rgb(198 241 53 / 0.45)" stroke-width="0.14"/></svg>
   </div>
 
   <!-- ================= VARIANTE B · Tipografía gigante por capas ================= -->
@@ -177,9 +188,12 @@
   <div class="guias">
     <div class="g-strip"></div>
     <div class="g-margin"></div>
-    <div class="g-line" style="top:135px"></div><span class="g-lbl" style="left:8px; top:138px">15 %</span>
-    <div class="g-line" style="top:540px"></div><span class="g-lbl" style="left:8px; top:543px">60 %</span>
+    <div class="g-line g-old" style="top:135px"></div><span class="g-lbl g-old" style="left:8px; top:138px">15 %</span>
+    <div class="g-line g-old" style="top:540px"></div><span class="g-lbl g-old" style="left:8px; top:543px">60 %</span>
+    <div class="g-line g-pc" style="top:40px"></div><div class="g-line g-pc" style="top:300px"></div><span class="g-lbl g-pc" style="left:8px; top:303px">300</span>
+    <div class="g-pc" style="position:absolute; left:600px; width:400px; top:300px; height:200px; background:rgb(255 59 212 / 0.18)"></div>
     <div class="g-circle"></div>
+    <div class="g-pc" style="position:absolute; left:800px; top:640px; width:540px; height:540px; transform:translate(-50%,-50%); border-radius:50%; border:3px dotted #29d3ff"></div>
   </div>
 </div>
 
