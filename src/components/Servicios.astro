@@ -13,8 +13,14 @@ const pasos = [
   { t: 'Lo hago', d: 'Me pongo con ello y te voy enseñando el avance para que opines.' },
   { t: 'Lo publicamos', d: 'Lo dejo funcionando y te explico cómo llevarlo tú.' },
 ];
-/* Herramientas de diseño: solo las que uso de verdad. Añade aquí las nuevas. */
-const diseno = ['Photoshop', 'Canva'];
+/* Herramientas de diseño: solo las que uso de verdad. Añade aquí las nuevas.
+   Van en texto con el estilo de la web (no con su logo: sus marcas no permiten
+   usarlo en un portfolio). `siglas` es lo que se ve (siglas o la palabra entera);
+   `nombre`, lo que lee el lector de pantalla. */
+const diseno = [
+  { siglas: 'Ps', nombre: 'Photoshop' },
+  { siglas: 'Canva', nombre: 'Canva' },
+];
 const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
 ---
 <section class="servicios section section--dark" id="servicios" aria-labelledby="serv-h">
@@ -54,8 +60,10 @@ const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
     <div class="tools">
       <h3 class="h3" data-lines><span class="line"><span class="line__in">Con qué lo hago</span></span></h3>
       <ul class="tools__list">
-        {diseno.map((n) => (
-          <li class="tool tool--text">{n}</li>
+        {diseno.map((d) => (
+          <li class:list={['tool', 'tool--abbr', { 'tool--word': d.siglas.length > 3 }]} title={d.nombre}>
+            <span aria-hidden="true">{d.siglas}</span><span class="sr-only">{d.nombre}</span>
+          </li>
         ))}
         {tools.map((t) => (
           <li class="tool" title={t.title}>
@@ -118,6 +126,7 @@ const tools = [siAstro, siGreensock, siGooglesheets, siGoogleappsscript];
     box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09); color: var(--cal); transition: color 0.3s, transform 0.3s; }
   .tool:hover { color: var(--accent); transform: translateY(-4px) rotate(-4deg); }
   .tool svg { width: 2rem; height: 2rem; }
-  .tool--text { width: auto; aspect-ratio: auto; height: 4.5rem; padding-inline: 1.4rem; font-family: var(--font-display); font-weight: 800; font-stretch: 112%; font-size: var(--step-0); letter-spacing: -0.01em; }
+  .tool--abbr { font-family: var(--font-display); font-weight: 900; font-stretch: 112%; font-size: 1.55rem; line-height: 1; letter-spacing: -0.03em; }
+  .tool--word { font-size: 0.95rem; font-stretch: 88%; letter-spacing: -0.01em; } /* palabra entera dentro de la misma ficha cuadrada */
   .tools__hand { margin-top: var(--space-2); font-size: 1.4rem; }
 </style>
