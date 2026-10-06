@@ -23,7 +23,12 @@ import { contacto, enlacePrincipal, enlaceEmail, enlaceInstagram } from '../conf
         Escríbeme por WhatsApp
       </a>
       {enlaceEmail && <a class="btn btn--ghost" href={enlaceEmail}>{contacto.email}</a>}
-      {enlaceInstagram && <a class="btn btn--ghost" href={enlaceInstagram} rel="noopener">Instagram</a>}
+      {enlaceInstagram && (
+        <a class="btn btn--dark" href={enlaceInstagram} target="_blank" rel="noopener" aria-label={`Instagram: @${contacto.instagram} (se abre en una pestaña nueva)`}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" /></svg>
+          @{contacto.instagram}
+        </a>
+      )}
     </div>
     {import.meta.env.DEV && !contacto.whatsapp && <p class="cta__dev">Solo en local: rellena tus datos en src/config/contacto.ts</p>}
   </div>
