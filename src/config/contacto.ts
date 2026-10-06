@@ -8,7 +8,7 @@
  */
 export const contacto = {
   email: '',
-  whatsapp: '',
+  whatsapp: '34644028761',
   instagram: '',
 };
 
