@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Banner WhatsApp Business · Carlos Fernández</title>
+<!--
+  Portada del perfil de WhatsApp Business (1600 × 900).
+  Usa los mismos tokens, fuentes, humo, grano y retrato que la web (rutas relativas al repo).
+  Parámetros: ?v=a|b|c (variante) · &sim=1 (simula la foto de perfil) · &guias=1 (zonas seguras)
+  Se exporta con generar.mjs. Esta carpeta no se publica con la web.
+-->
+<link rel="stylesheet" href="../../src/styles/tokens.css" />
+<style>
+  @font-face { font-family: 'Archivo Variable'; font-weight: 100 900; font-stretch: 62% 125%; src: url('../../src/assets/fonts/archivo-latin-wdth-normal.woff2') format('woff2-variations'); }
+  @font-face { font-family: 'Instrument Sans Variable'; font-weight: 400 700; src: url('../../src/assets/fonts/instrument-sans-latin-wght-normal.woff2') format('woff2-variations'); }
+  @font-face { font-family: 'Caveat'; font-weight: 500; src: url('../../src/assets/fonts/caveat-latin-500-normal.woff2') format('woff2'); }
+
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1600px; height: 900px; background: var(--noche); }
+  .stage { position: relative; width: 1600px; height: 900px; overflow: hidden; isolation: isolate; background: var(--noche); color: var(--cal); }
+  .v { display: none; }
+  [data-v='a'] .va, [data-v='b'] .vb, [data-v='c'] .vc { display: block; }
+
+  /* ---------- Fondo: humo, halo lima detrás del hueco de la foto, viñeta y grano ---------- */
+  .ribbon { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .ribbon--b { transform: translate(40px, -30px); }
+  .halo { position: absolute; z-index: 1; left: 800px; top: 700px; width: 1240px; height: 1240px; transform: translate(-50%, -50%); border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 90%, transparent) 0%, color-mix(in srgb, var(--accent) 55%, transparent) 30%, color-mix(in srgb, var(--accent) 18%, transparent) 56%, transparent 74%); }
+  .halo--core { width: 640px; height: 640px; background: radial-gradient(closest-side, var(--accent-hi) 0%, var(--accent) 55%, color-mix(in srgb, var(--accent) 0%, transparent) 100%); opacity: 0.9; }
+  .vignette { position: absolute; inset: 0; z-index: 2; background: radial-gradient(ellipse 75% 70% at 50% 55%, transparent 45%, rgb(0 0 0 / 0.72) 100%); }
+  .grain { position: absolute; inset: 0; z-index: 30; pointer-events: none; opacity: 0.32; background: url('../../public/grain-light.png') 0 0 / 128px 128px; }
+  .fade-bottom { position: absolute; inset: auto 0 0 0; height: 260px; z-index: 2; background: linear-gradient(to top, rgb(11 11 12 / 0.55), transparent); }
+
+  /* ---------- Piezas comunes ---------- */
+  .at { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%) rotate(var(--r, 0deg)); }
+  .display { font-family: var(--font-display); font-weight: 900; font-stretch: 125%; line-height: 0.92; letter-spacing: -0.02em; white-space: nowrap; }
+  .hand { font-family: var(--font-hand); color: var(--accent); line-height: 1; white-space: nowrap; }
+  .star { display: inline-block; flex: none; width: 1em; height: 1em; }
+  .star path { fill: currentColor; }
+  svg.doodle { position: absolute; overflow: visible; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Tiras del marquee (mismo estilo que la web) */
+  .band { width: 2600px; height: var(--h, 150px); display: flex; align-items: center; justify-content: var(--jc, center); padding-left: var(--pl, 0px); gap: 0.45em; }
+  .band__row { display: flex; align-items: center; gap: 0.45em; transform: translateX(var(--tx, 0px)); }
+  .band--lime { background: var(--accent); color: var(--on-accent); box-shadow: 0 26px 60px rgb(0 0 0 / 0.45); }
+  .band--dark { background: var(--noche); color: var(--cal); border-block: 2px solid #2c2c30; box-shadow: 0 26px 60px rgb(0 0 0 / 0.5); }
+  .band--dark .w { color: transparent; -webkit-text-stroke: 2.5px var(--cal); }
+  .band--dark .star { color: var(--accent); }
+  .band .fill { opacity: 0.9; }
+
+  /* Pastillas como las del hero */
+  .pill { display: inline-flex; align-items: center; gap: 22px; padding: 16px 40px 16px 16px; border-radius: 999px; background: var(--cal); color: var(--tinta);
+    font-family: var(--font-display); font-stretch: 105%; font-weight: 800; font-size: 52px; line-height: 1; white-space: nowrap;
+    box-shadow: 0 2px 0 rgb(255 255 255 / 0.8) inset, 0 30px 60px rgb(0 0 0 / 0.55), 0 6px 14px rgb(0 0 0 / 0.35); }
+  .pill__icon { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; background: var(--noche); color: var(--accent); flex: none; }
+  .pill__icon svg { width: 46px; height: 46px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ---------- Simulación de la foto de perfil de WhatsApp ---------- */
+  .sim { display: none; position: absolute; z-index: 50; left: 800px; top: 700px; width: 540px; height: 540px; transform: translate(-50%, -50%); border-radius: 50%; overflow: hidden;
+    background: radial-gradient(circle at 50% 26%, var(--accent-hi), var(--accent) 40%, var(--accent-lo) 105%); box-shadow: 0 0 0 10px #f2f2f2, 0 20px 60px rgb(0 0 0 / 0.5); }
+  .sim img { position: absolute; left: 50%; bottom: -6%; width: 104%; transform: translateX(-50%); }
+  [data-sim] .sim { display: block; }
+
+  /* ---------- Guías (solo para revisar) ---------- */
+  .guias { display: none; position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+  [data-guias] .guias { display: block; }
+  .g-line { position: absolute; left: 0; right: 0; border-top: 2px dashed #ff3bd4; }
+  .g-strip { position: absolute; left: 0; right: 0; top: 102px; height: 696px; outline: 3px solid #29d3ff; }
+  .g-margin { position: absolute; left: 96px; right: 96px; top: 0; bottom: 0; border-inline: 2px dashed #ffb21e; }
+  .g-circle { position: absolute; left: 800px; top: 700px; width: 600px; height: 600px; transform: translate(-50%, -50%); border-radius: 50%; border: 3px dashed #ff3bd4; }
+  .g-lbl { position: absolute; font: 600 20px var(--font-text); color: #ff3bd4; background: rgb(0 0 0 / 0.6); padding: 2px 8px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="star" viewBox="0 0 24 24"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" /></symbol>
+    <symbol id="spark" viewBox="0 0 40 40"><path d="M20 0c1.6 10 4 13 20 20-16 7-18.4 10-20 20-1.6-10-4-13-20-20 16-7 18.4-10 20-20Z" /></symbol>
+  </defs>
+</svg>
+
+<div class="stage">
+  <!-- Fondo común -->
+  <img class="ribbon" src="../../src/assets/smoke/ribbon-a-dark.webp" alt="" />
+  <img class="ribbon ribbon--b" src="../../src/assets/smoke/ribbon-b-dark.webp" alt="" />
+  <span class="halo"></span>
+  <span class="vignette"></span>
+
+  <!-- ================= VARIANTE A · Tiras cruzadas ================= -->
+  <div class="v va">
+    <!-- tira oscura con letra de contorno: cruza por detrás de la lima -->
+    <div class="at band band--dark" style="--x:800px; --y:384px; --r:-7deg; --h:124px; --jc:flex-start; --pl:560px; z-index:5; font-size:88px">
+      <div class="band__row">
+        <svg class="star"><use href="#star"/></svg>
+        <span class="display w">Logotipos</span>
+        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
+      </div>
+    </div>
+    <!-- tira lima (por delante) -->
+    <div class="at band band--lime" style="--x:800px; --y:236px; --r:4deg; --h:156px; z-index:6; font-size:68px">
+      <div class="band__row">
+        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
+        <span class="display">Diseño web</span><svg class="star"><use href="#star"/></svg>
+        <span class="display">Redes sociales</span>
+        <svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg><svg class="star"><use href="#star"/></svg>
+      </div>
+    </div>
+    <!-- subrayado a mano bajo "Logotipos" -->
+    <svg class="doodle" viewBox="0 0 520 60" style="left:170px; top:470px; width:430px; z-index:7; transform:rotate(-7deg)"><path d="M6 30c90-16 230-22 360-14 50 3 100 8 148 16" stroke="var(--accent)" stroke-width="8"/><path d="M40 48c110-10 250-12 400-2" stroke="var(--accent)" stroke-width="4" opacity="0.7"/></svg>
+    <!-- destellos -->
+    <svg class="doodle" style="left:150px; top:96px; width:62px; height:62px; z-index:8; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" style="left:1400px; top:96px; width:40px; height:40px; z-index:8; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" style="left:1420px; top:560px; width:54px; height:54px; z-index:8; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" viewBox="0 0 80 80" style="left:150px; top:600px; width:80px; z-index:8"><path d="M40 6v16M40 58v16M6 40h16M58 40h16M16 16l10 10M54 54l10 10M64 16 54 26M26 54 16 64" stroke="var(--cal)" stroke-width="4" opacity="0.8"/></svg>
+    <!-- profundidad: estrellas gigantes en contorno detrás, a los lados del hueco -->
+    <svg class="doodle" viewBox="0 0 24 24" style="left:150px; top:560px; width:330px; z-index:3; transform:rotate(12deg)"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" stroke="rgb(236 233 228 / 0.22)" stroke-width="0.18"/></svg>
+    <svg class="doodle" viewBox="0 0 24 24" style="left:1160px; top:600px; width:260px; z-index:3; transform:rotate(-8deg)"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6Z" fill="rgb(198 241 53 / 0.12)" stroke="rgb(198 241 53 / 0.45)" stroke-width="0.14"/></svg>
+    <!-- nota "¿Hablamos?" con flecha hacia la foto -->
+    <p class="at hand" style="--x:1240px; --y:452px; --r:-6deg; font-size:92px; z-index:9">¿Hablamos?</p>
+    <svg class="doodle" viewBox="0 0 220 160" style="left:1030px; top:500px; width:200px; z-index:9"><path d="M206 12c-60-4-118 16-150 60-12 16-18 36-20 54" stroke="var(--accent)" stroke-width="7"/><path d="M14 100l22 32 28-30" stroke="var(--accent)" stroke-width="7"/></svg>
+  </div>
+
+  <!-- ================= VARIANTE B · Tipografía gigante por capas ================= -->
+  <div class="v vb">
+    <!-- tira lima por detrás del hueco de la foto, de lado a lado -->
+    <div class="at band band--lime" style="--x:800px; --y:690px; --r:-4deg; --h:118px; z-index:4; font-size:58px">
+      <div class="band__row">
+        <svg class="star"><use href="#star"/></svg><span class="display">Diseño web</span><svg class="star"><use href="#star"/></svg><span class="display">Logotipos</span><svg class="star"><use href="#star"/></svg><span class="display">Redes sociales</span><svg class="star"><use href="#star"/></svg><span class="display">Diseño web</span><svg class="star"><use href="#star"/></svg><span class="display">Logotipos</span><svg class="star"><use href="#star"/></svg>
+      </div>
+    </div>
+    <div class="at band band--dark" style="--x:800px; --y:640px; --r:5deg; --h:96px; z-index:3; font-size:50px">
+      <div class="band__row"><svg class="star"><use href="#star"/></svg><span class="display w">Redes sociales</span><svg class="star"><use href="#star"/></svg><span class="display w">Diseño web</span><svg class="star"><use href="#star"/></svg><span class="display w">Logotipos</span><svg class="star"><use href="#star"/></svg><span class="display w">Redes sociales</span><svg class="star"><use href="#star"/></svg><span class="display w">Diseño web</span><svg class="star"><use href="#star"/></svg></div>
+    </div>
+    <!-- las tres palabras, apiladas y escalonadas -->
+    <p class="display" style="position:absolute; left:120px; top:128px; font-size:100px; z-index:8; color:var(--cal)">Diseño <span style="position:relative; z-index:0">web<svg class="doodle" viewBox="0 0 300 70" style="left:-14px; bottom:-6px; width:280px; z-index:-1"><path d="M8 40c60-14 160-22 284-8" stroke="var(--accent)" stroke-width="44" opacity="0.95"/></svg></span></p>
+    <p class="display" style="position:absolute; right:120px; top:226px; font-size:100px; z-index:7; color:transparent; -webkit-text-stroke:3px var(--accent)">Logotipos</p>
+    <p class="display" style="position:absolute; right:110px; top:234px; font-size:100px; z-index:6; color:rgb(198 241 53 / 0.16)">Logotipos</p>
+    <p class="display" style="position:absolute; left:120px; top:324px; font-size:86px; z-index:8; color:var(--accent); text-shadow: 7px 7px 0 var(--noche)">Redes sociales</p>
+    <!-- trazos y destellos -->
+    <svg class="doodle" style="left:940px; top:140px; width:58px; height:58px; z-index:9; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" style="left:1460px; top:388px; width:44px; height:44px; z-index:9; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" viewBox="0 0 120 120" style="left:1390px; top:96px; width:96px; z-index:9"><path d="M60 20c-24 0-40 18-38 40 2 24 26 38 46 30 22-8 28-34 14-52-12-16-36-14-44 4" stroke="var(--cal)" stroke-width="5" opacity="0.85"/></svg>
+    <svg class="doodle" viewBox="0 0 80 80" style="left:150px; top:470px; width:70px; z-index:9"><path d="M40 6v16M40 58v16M6 40h16M58 40h16M16 16l10 10M54 54l10 10M64 16 54 26M26 54 16 64" stroke="var(--accent)" stroke-width="4"/></svg>
+    <!-- nota "¿Hablamos?" -->
+    <p class="at hand" style="--x:1270px; --y:505px; --r:-4deg; font-size:84px; z-index:10">¿Hablamos?</p>
+    <svg class="doodle" viewBox="0 0 220 150" style="left:1030px; top:520px; width:200px; z-index:10"><path d="M200 14c-64-4-120 18-148 62-10 16-16 34-16 52" stroke="var(--accent)" stroke-width="7"/><path d="M14 104l22 30 26-30" stroke="var(--accent)" stroke-width="7"/></svg>
+  </div>
+
+  <!-- ================= VARIANTE C · Pastillas y anillo a mano ================= -->
+  <div class="v vc">
+    <!-- tira oscura de contorno, de fondo -->
+    <div class="at band band--dark" style="--x:800px; --y:330px; --r:-6deg; --h:110px; z-index:3; font-size:66px; opacity:0.92">
+      <div class="band__row"><svg class="star"><use href="#star"/></svg><span class="display w">Diseño web</span><svg class="star"><use href="#star"/></svg><span class="display w">Logotipos</span><svg class="star"><use href="#star"/></svg><span class="display w">Redes sociales</span><svg class="star"><use href="#star"/></svg><span class="display w">Diseño web</span><svg class="star"><use href="#star"/></svg></div>
+    </div>
+    <!-- anillo dibujado a mano alrededor del hueco de la foto -->
+    <svg class="doodle" viewBox="0 0 700 700" style="left:450px; top:350px; width:700px; z-index:4"><path d="M350 28c170-6 318 120 320 306 2 190-150 330-330 330C150 664 26 520 30 340 34 170 170 40 340 34c40-2 80 4 116 16" stroke="var(--accent)" stroke-width="9"/></svg>
+    <!-- pastillas de servicios (pisan la tira) -->
+    <div class="at" style="--x:380px; --y:200px; --r:-6deg; z-index:8"><span class="pill"><span class="pill__icon"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M3 9.5h18"/></svg></span>Diseño web</span></div>
+    <div class="at" style="--x:1215px; --y:262px; --r:5deg; z-index:8"><span class="pill"><span class="pill__icon"><svg viewBox="0 0 24 24"><path d="M12 2.5 18.5 11 12 21.5 5.5 11Z"/><circle cx="12" cy="11" r="1.7"/></svg></span>Logotipos</span></div>
+    <div class="at" style="--x:360px; --y:404px; --r:3deg; z-index:8"><span class="pill"><span class="pill__icon"><svg viewBox="0 0 24 24"><path d="M12 20.5s-8-4.8-8-10.7A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.8c0 5.9-8 10.7-8 10.7Z"/></svg></span>Redes sociales</span></div>
+    <!-- nota arriba, flecha larga hacia la foto -->
+    <p class="at hand" style="--x:820px; --y:150px; --r:-3deg; font-size:96px; z-index:9; text-shadow: 0 0 18px var(--noche), 0 0 6px var(--noche)">¿Hablamos?</p>
+    <svg class="doodle" viewBox="0 0 160 260" style="left:830px; top:196px; width:140px; z-index:9"><path d="M30 10c70 30 90 90 60 150-8 16-16 30-22 48" stroke="var(--accent)" stroke-width="6"/><path d="M42 196l24 34 30-28" stroke="var(--accent)" stroke-width="6"/></svg>
+    <!-- destellos -->
+    <svg class="doodle" style="left:1390px; top:120px; width:60px; height:60px; z-index:9; color:var(--accent)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" style="left:120px; top:96px; width:40px; height:40px; z-index:9; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" style="left:1320px; top:430px; width:46px; height:46px; z-index:9; color:var(--cal)"><use href="#spark" fill="currentColor"/></svg>
+    <svg class="doodle" viewBox="0 0 80 80" style="left:1430px; top:380px; width:80px; z-index:9"><path d="M40 6v16M40 58v16M6 40h16M58 40h16M16 16l10 10M54 54l10 10M64 16 54 26M26 54 16 64" stroke="var(--accent)" stroke-width="4"/></svg>
+  </div>
+
+  <span class="grain"></span>
+
+  <!-- Simulación de la foto de perfil -->
+  <div class="sim"><img src="../../src/assets/carlos-recorte.png" alt="" /></div>
+
+  <!-- Guías -->
+  <div class="guias">
+    <div class="g-strip"></div>
+    <div class="g-margin"></div>
+    <div class="g-line" style="top:135px"></div><span class="g-lbl" style="left:8px; top:138px">15 %</span>
+    <div class="g-line" style="top:540px"></div><span class="g-lbl" style="left:8px; top:543px">60 %</span>
+    <div class="g-circle"></div>
+  </div>
+</div>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  document.body.dataset.v = q.get('v') || 'a';
+  if (q.get('sim')) document.body.dataset.sim = '';
+  if (q.get('guias')) document.body.dataset.guias = '';
+</script>
+</body>
+</html>
