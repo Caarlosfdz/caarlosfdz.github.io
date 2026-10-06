@@ -9,7 +9,7 @@
 export const contacto = {
   email: 'carlosfernandez.webs@gmail.com',
   whatsapp: '34644028761',
-  instagram: '',
+  instagram: 'carlosfernandez.webs',
 };
 
 /** Mensaje que llega escrito cuando alguien pulsa el botón de WhatsApp. */
