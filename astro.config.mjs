@@ -24,7 +24,7 @@ const quitarOriginalesSinUso = () => ({
 
 // Sitio de usuario: se publica en la raíz, sin `base`.
 export default defineConfig({
-  site: 'https://caarlosfdz.github.io',
+  site: 'https://carlosfernandezwebs.es',
   integrations: [sitemap(), quitarOriginalesSinUso()],
   // El CSS es pequeño: va dentro del HTML para que no bloquee el primer pintado.
   build: { inlineStylesheets: 'always' },
