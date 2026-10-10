@@ -27,9 +27,8 @@ import { siInstagram } from 'simple-icons';
       </a>
       {enlaceEmail && <a class="btn btn--ghost" href={enlaceEmail}>{contacto.email}</a>}
       {enlaceInstagram && (
-        <a class="ig" href={enlaceInstagram} target="_blank" rel="noopener" aria-label={`Instagram: @${contacto.instagram} (se abre en una pestaña nueva)`}>
+        <a class="ig" href={enlaceInstagram} target="_blank" rel="noopener" aria-label={`Instagram: @${contacto.instagram} (se abre en una pestaña nueva)`} title={`@${contacto.instagram} en Instagram`}>
           <svg class="ig__glyph" viewBox="0 0 24 24" width="44" height="44" aria-hidden="true"><path d={siInstagram.path} fill="currentColor" /></svg>
-          <span class="ig__user">@{contacto.instagram}</span>
         </a>
       )}
     </div>
@@ -48,12 +47,11 @@ import { siInstagram } from 'simple-icons';
   .cta__in { display: grid; gap: var(--space-3); justify-items: start; position: relative; }
   .cta__sub { font-size: var(--step-1); max-width: 30rem; font-weight: 500; }
   .cta__btns { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
-  /* Instagram: glifo negro clicable con el usuario al lado. Margen libre ≥ medio glifo (22 px). */
-  .ig { display: inline-flex; align-items: center; gap: 22px; padding: 6px 22px 6px 0; margin-left: 22px; color: #000; text-decoration: none; border-radius: 999px; }
+  /* Instagram: solo el glifo negro, clicable. Margen libre ≥ medio glifo (22 px). */
+  .ig { display: inline-flex; align-items: center; gap: 22px; padding: 0; margin-inline: 22px; color: #000; text-decoration: none; border-radius: 999px; }
   .ig__glyph { width: 44px; height: 44px; flex: none; transition: transform 0.25s; }
-  .ig__user { font-family: var(--font-display); font-stretch: 112%; font-weight: 800; font-size: var(--step-0); }
   .ig:hover .ig__glyph { transform: scale(1.08) rotate(-6deg); }
-  .ig:hover .ig__user { text-decoration: underline; text-underline-offset: 0.2em; }
+  .ig:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
   @media (max-width: 30rem) { .ig { margin-left: 0; } }
   .cta__dev { font-size: var(--step--1); opacity: 0.7; }
 

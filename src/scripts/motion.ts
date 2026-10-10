@@ -305,7 +305,7 @@ function projects() {
       const move = (e: PointerEvent) => { px = e.clientX; py = e.clientY; cx(px); cy(py); };
       const fuera = () => {
         raf = 0;
-        if (!document.elementFromPoint(px, py)?.closest('.card')) gsap.to(cur, { scale: 0, duration: 0.2, overwrite: true, onComplete: () => cool([cur]) });
+        if (!document.elementFromPoint(px, py)?.closest('.card')) gsap.to(cur, { scale: 0, duration: 0.2, overwrite: 'auto', onComplete: () => cool([cur]) });
       };
       const onScroll = () => { if (!raf) raf = requestAnimationFrame(fuera); };
       window.addEventListener('pointermove', move, { passive: true });
@@ -313,8 +313,8 @@ function projects() {
       off.push(() => { window.removeEventListener('pointermove', move); window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); gsap.set(cur, { scale: 0 }); });
       $$('.card [data-cursor]').forEach((a) => {
         const card = a.closest('.card') as HTMLElement;
-        const enter = () => { cur.textContent = a.dataset.cursor ?? ''; warm([cur]); gsap.to(cur, { scale: 1, duration: 0.25, ease: 'back.out(2)', overwrite: true }); };
-        const out = () => gsap.to(cur, { scale: 0, duration: 0.2, overwrite: true, onComplete: () => cool([cur]) });
+        const enter = () => { cur.textContent = a.dataset.cursor ?? ''; warm([cur]); gsap.to(cur, { scale: 1, duration: 0.25, ease: 'back.out(2)', overwrite: 'auto' }); };
+        const out = () => gsap.to(cur, { scale: 0, duration: 0.2, overwrite: 'auto', onComplete: () => cool([cur]) });
         card.addEventListener('pointerenter', enter); card.addEventListener('pointerleave', out);
         off.push(() => { card.removeEventListener('pointerenter', enter); card.removeEventListener('pointerleave', out); });
       });
@@ -368,8 +368,8 @@ function projectPage() {
       const cx = gsap.quickTo(cur, 'x', { duration: 0.35, ease: 'power3.out' });
       const cy = gsap.quickTo(cur, 'y', { duration: 0.35, ease: 'power3.out' });
       const move = (e: PointerEvent) => { cx(e.clientX); cy(e.clientY); };
-      const enter = () => { cur.textContent = link.dataset.cursor ?? ''; warm([cur]); gsap.to(cur, { scale: 1, duration: 0.25, ease: 'back.out(2)', overwrite: true }); };
-      const out = () => gsap.to(cur, { scale: 0, duration: 0.2, overwrite: true, onComplete: () => cool([cur]) });
+      const enter = () => { cur.textContent = link.dataset.cursor ?? ''; warm([cur]); gsap.to(cur, { scale: 1, duration: 0.25, ease: 'back.out(2)', overwrite: 'auto' }); };
+      const out = () => gsap.to(cur, { scale: 0, duration: 0.2, overwrite: 'auto', onComplete: () => cool([cur]) });
       window.addEventListener('pointermove', move, { passive: true }); link.addEventListener('pointerenter', enter); link.addEventListener('pointerleave', out);
       off.push(() => { window.removeEventListener('pointermove', move); link.removeEventListener('pointerenter', enter); link.removeEventListener('pointerleave', out); gsap.set(cur, { scale: 0 }); });
     }
